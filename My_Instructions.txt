@@ -21,6 +21,14 @@ Read SQL File
 5. Deploy: git commit and git push the mtg_stats.db and app.py to GitHub.
 
 Using Venv
-	Create it: python -m venv venv
+	Create it: py -m venv venv
 	Activate it:
 	Windows: .\venv\Scripts\activate
+
+Run db_Manager.py:
+	python db_Manager.py
+
+
+Backup Database
+	sqlite3 mtg_stats.db .dump > backup_full_database.sql
+	(This should dump the database into one large sql file)
