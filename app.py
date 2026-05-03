@@ -56,8 +56,8 @@ def show_deck_stats():
         st.info("No decks found for this player.")
 
 # --- SIDEBAR NAVIGATION ---
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Leaderboard", "Deck Stats"])
+st.header("Navigation")
+page = st.header("Go to", ["Leaderboard", "Deck Stats"])
 
 if page == "Leaderboard":
     show_leaderboard()
