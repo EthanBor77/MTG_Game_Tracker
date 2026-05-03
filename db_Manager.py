@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from datetime import datetime
 
 """
 Database manager for handling SQLite operations.
@@ -7,6 +8,8 @@ Currently supports:
 1. Initializing the database schema from a .sql file.
 2. Updating match history from a .sql file.
 """
+
+DB_NAME = "mtg_stats.db"
 
 def run_sql_script(db_name, sql_file):
     """Executes a .sql script against the specified SQLite database."""
@@ -36,6 +39,24 @@ def run_sql_script(db_name, sql_file):
         if conn:
             conn.close()
 
+def create_database_backup():
+    """Generates a SQL dump of the entire database for recovery."""
+    backup_filename = f"backup_full_database_{datetime.now().strftime('%Y-%m-%d')}.sql"
+    
+    try:
+        # Connect to your existing stats database
+        with sqlite3.connect(DB_NAME) as conn:
+            with open(backup_filename, 'w', encoding='utf-8') as f:
+                # iterdump() creates the SQL commands to recreate the DB from scratch
+                for line in conn.iterdump():
+                    f.write(f'{line}\n')
+                    
+        print(f"✅ Success! Backup created: {backup_filename}")
+        print(f"This file contains all players, 190+ decks, and 140 games in plain text.")
+        
+    except sqlite3.Error as e:
+        print(f"❌ Backup failed: {e}")
+
 def main():
     db_name = "mtg_stats.db"
     
@@ -43,9 +64,10 @@ def main():
     print("1. Initialize Database (Run createDatabase.sql)")
     print("2. Update Match History (Run update_games.sql)")
     print("3. Check Games (Run checkGames.sql)")
-    print("4. Exit")
+    print("4. Create Database Backup")
+    print("5. Exit")
     
-    choice = input("\nSelect an option (1-4): ")
+    choice = input("\nSelect an option (1-5): ")
 
     if choice == '1':
         run_sql_script(db_name, 'createDatabase.sql')
@@ -55,6 +77,8 @@ def main():
     elif choice == '3':
         run_sql_script(db_name, 'checkGames.sql')
     elif choice == '4':
+        create_database_backup()
+    elif choice == '5':
         print("Exiting...")
     else:
         print("Invalid choice.")

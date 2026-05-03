@@ -16,3 +16,5 @@ Thumbs.db
 
 # Database (See note below)
 # mtg_stats.db
+
+backups/
