@@ -1,0 +1,26 @@
+Access Database:
+In Terminal:
+	cd "C:\Users\ethan\Documents\Software Engineering\SQLite\"
+	.\sqlite3.exe intro.db
+
+View Table Structure:
+	.schema
+
+Read SQL File
+	.read "C:\Users\ethan\Documents\Software Engineering\Projects\Game Tracker\testDB1.sql"
+
+
+1. Initial Setup: Run python db_Manager.py (ensure it points to createDatabase.sql) to generate the initial mtg_stats.db.  
+
+2. Add Games: Write new INSERT statements into update_games.sql.
+
+3. Update DB: Run python db_Manager.py (pointing to update_games.sql) to commit the new games to the database.  
+
+4. Test Locally: Run streamlit run app.py in your terminal to see the charts update on your local machine.
+
+5. Deploy: git commit and git push the mtg_stats.db and app.py to GitHub.
+
+Using Venv
+	Create it: python -m venv venv
+	Activate it:
+	Windows: .\venv\Scripts\activate
