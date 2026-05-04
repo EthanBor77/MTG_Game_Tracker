@@ -41,10 +41,19 @@ selected_player = st.selectbox("Select a Player to see their decks:", player_lis
 if selected_player:
     deck_stats = get_deck_data(selected_player)
     if not deck_stats.empty:
-        # Use the NEW column name for sorting
+        # 1. Sort the data first
+        sorted_stats = deck_stats.sort_values('Win Rate %', ascending=False)
+        
+        # 2. Use Styler to format the Win Rate % column
+        # '{:,.2f}%' means: 2 decimal places + a percent sign
+        styled_stats = sorted_stats.style.format({
+            'Win Rate %': '{:.2f}%'
+        })
+        
+        # 3. Display the styled dataframe
         st.dataframe(
-            deck_stats.sort_values('Win Rate %', ascending=False), 
-            width="stretch",  # Updated from use_container_width=True
+            styled_stats, 
+            width="stretch", 
             hide_index=True
         )
     else:
