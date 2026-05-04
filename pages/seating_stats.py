@@ -5,7 +5,6 @@ import sqlite3
 st.set_page_config(page_title="Seating & Game Stats", layout="wide")
 
 st.title("📊 Seating & Meta Analytics")
-st.markdown("Analyzing turn advantage and game pacing for the Auburn Hills meta.")
 
 def get_connection():
     return sqlite3.connect("mtg_stats.db")
@@ -23,8 +22,7 @@ def get_all_meta_stats():
     """
     meta_df = pd.read_sql(meta_query, conn)
     
-    # 2. Player Count Distribution (Calculated from participants)
-    # We group by game_id to see how many players were in each session
+    # 2. Player Count Distribution
     pod_dist_query = """
         SELECT player_count, COUNT(*) as count 
         FROM (
@@ -37,7 +35,6 @@ def get_all_meta_stats():
     pod_dist_df = pd.read_sql(pod_dist_query, conn)
     
     # 3. Win Rate by Seat vs. Pod Size
-    # We use a Common Table Expression (CTE) to find the pod size for every game
     pod_seat_query = """
         WITH GameSizes AS (
             SELECT game_id, COUNT(player_id) as player_count
@@ -57,33 +54,36 @@ def get_all_meta_stats():
     pod_seat_df = pd.read_sql(pod_seat_query, conn)
     pod_seat_df['Win Rate %'] = (pod_seat_df['wins'] / pod_seat_df['total_seats'] * 100).round(2)
 
-    # 4. Most Common Turn of Death
-    # Note: If you haven't added a 'turn_out' column to participants yet,
-    # this will return an empty dataframe or error. 
-    # For now, I'll use end_turn from the games table as a fallback for the winner.
-    death_query = """
-        SELECT end_turn as turn_out, COUNT(*) as death_count
+    # 4. Survival Window Data (New Logic)
+    # Measures the gap between first player out and the end of the game
+    survival_query = """
+        SELECT 
+            game_id,
+            first_blood_turn,
+            end_turn,
+            (end_turn - first_blood_turn) as survival_gap
         FROM games
-        GROUP BY end_turn
+        WHERE first_blood_turn IS NOT NULL AND end_turn IS NOT NULL
     """
-    death_df = pd.read_sql(death_query, conn)
+    survival_df = pd.read_sql(survival_query, conn)
     
     conn.close()
-    return meta_df, pod_dist_df, pod_seat_df, death_df
+    return meta_df, pod_dist_df, pod_seat_df, survival_df
 
 try:
-    meta, pod_dist, pod_seat, death = get_all_meta_stats()
+    meta, pod_dist, pod_seat, survival = get_all_meta_stats()
 
     # --- TOP METRICS ---
     c1, c2, c3, c4 = st.columns(4)
     total_g = meta['total_games'].iloc[0]
     avg_e = meta['avg_end'].iloc[0]
     avg_f = meta['avg_fb'].iloc[0]
+    avg_gap = survival['survival_gap'].mean() if not survival.empty else 0
     
     c1.metric("Total Games", total_g)
     c2.metric("Avg. Game Length", f"Turn {avg_e:.1f}")
     c3.metric("Avg. First Blood", f"Turn {avg_f:.1f}")
-    c4.metric("Avg. Time/Player", f"{avg_e/4:.1f} Turns") # Assuming 4 is the median pod size
+    c4.metric("Avg. Survival Gap", f"{avg_gap:.1f} Turns")
 
     st.divider()
 
@@ -97,24 +97,25 @@ try:
 
     with col_right:
         st.subheader("Win Rate: Seat vs. Pod Size")
-        # Pivot for the heatmap-style table
         pivot_pod = pod_seat.pivot(index='player_count', columns='turn_order', values='Win Rate %')
         st.table(pivot_pod.style.format("{:.2f}%", na_rep="-"))
 
     st.divider()
 
-    # --- LETHALITY ---
-    st.subheader("Lethality: When do players lose?")
-    if not death.empty:
-        # Charting the turn of death
-        st.bar_chart(death, x="turn_out", y="death_count")
+    # --- SURVIVAL WINDOW SECTION ---
+    st.subheader("⏱️ The Survival Window")
+    if not survival.empty:
+        # Visualizing the gap between First Blood and Game End
+        # We sort by when first blood happened to see trends
+        chart_data = survival[['first_blood_turn', 'end_turn']].sort_values('first_blood_turn').reset_index(drop=True)
         
-        # Calculate most common turn
-        peak_turn = death.loc[death['death_count'].idxmax(), 'turn_out']
-        st.info(f"💡 **Meta Insight:** Most players are eliminated on **Turn {int(peak_turn)}**. "
-                "Decks should be built to survive or win by this point!")
+        st.area_chart(chart_data)
+        
+        st.info(f"💡 **Meta Insight:** On average, once the first player is eliminated on **Turn {avg_f:.1f}**, "
+                f"the game lasts another **{avg_gap:.1f} turns**. "
+                "This is the window where eliminated players are waiting for the next match!")
     else:
-        st.warning("No elimination data (turn_out) found in your database records.")
+        st.warning("No timing data found. Ensure 'first_blood_turn' and 'end_turn' are populated.")
 
 except Exception as e:
     st.error(f"Error generating seating stats: {e}")
