@@ -16,7 +16,7 @@ deck_page = st.Page(
 
 seating_page = st.Page(
     "pages/seating_stats.py", 
-    title="Turn Order Analysis", 
+    title="Seating Analysis", 
     icon="🪑"
 )
 

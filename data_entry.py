@@ -201,6 +201,45 @@ def export_full_log():
         print("=" * 80)
         print(f"Total rows displayed: {len(rows)}")
 
+def remove_game():
+    # Removes a game and its participants from the database by ID.
+    print("\n--- Remove a Game Entry ---")
+    game_id_str = input("Enter the Game ID you wish to delete (or press Enter to cancel): ")
+    
+    if not game_id_str.isdigit():
+        print("Action cancelled or invalid ID.")
+        return
+
+    game_id = int(game_id_str)
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        
+        # 1. Fetch game details so the user can verify before deleting
+        cursor.execute("SELECT game_date, win_condition FROM games WHERE game_id = ?", (game_id,))
+        game = cursor.fetchone()
+
+        if not game:
+            print(f"Error: Game #{game_id} not found.")
+            return
+
+        print(f"\nTarget Game: #{game_id} | Date: {game[0]} | Method: {game[1]}")
+        confirm = input(f"Are you SURE you want to delete this game? This cannot be undone! (y/n): ").lower()
+
+        if confirm == 'y':
+            try:
+                # 2. Delete participants first (due to foreign key relationships)
+                cursor.execute("DELETE FROM participants WHERE game_id = ?", (game_id,))
+                
+                # 3. Delete the game itself
+                cursor.execute("DELETE FROM games WHERE game_id = ?", (game_id,))
+                
+                print(f"Success: Game #{game_id} and all its participant data have been removed.")
+            except sqlite3.Error as e:
+                print(f"An error occurred: {e}")
+        else:
+            print("Deletion cancelled.")
+
 def main():
     while True:
         print("\n=== MTG STAT TRACKER ===")
@@ -210,7 +249,8 @@ def main():
         print("4. Log New Game")
         print("5. View Recent Games")
         print("6. Check ALL Games")
-        print("7. Exit")
+        print("7. Remove a Game")
+        print("8. Exit")
         
         choice = input("\nSelect an option: ")
         if choice == '1': add_player()
@@ -219,7 +259,8 @@ def main():
         elif choice == '4': log_game()
         elif choice == '5': view_recent_games()
         elif choice == '6': export_full_log()
-        elif choice == '7': break
+        elif choice == '7': remove_game()
+        elif choice == '8': break
 
 if __name__ == "__main__":
     main()

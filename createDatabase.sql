@@ -1,11 +1,11 @@
 -- 1. Disable foreign keys so we can drop tables without errors
-PRAGMA foreign_keys = OFF;
+-- PRAGMA foreign_keys = OFF;
 
--- 2. Drop existing tables if they exist
-DROP TABLE IF EXISTS participants;
-DROP TABLE IF EXISTS games;
-DROP TABLE IF EXISTS decks;
-DROP TABLE IF EXISTS players;
+-- -- 2. Drop existing tables if they exist
+-- DROP TABLE IF EXISTS participants;
+-- DROP TABLE IF EXISTS games;
+-- DROP TABLE IF EXISTS decks;
+-- DROP TABLE IF EXISTS players;
 
 -- 3. Re-enable foreign keys
 PRAGMA foreign_keys = ON;
