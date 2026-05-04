@@ -7,21 +7,28 @@ st.title("🎴 Individual Deck Performance")
 
 def get_deck_data(player_name):
     conn = sqlite3.connect("mtg_stats.db")
+    # We join participants to players to ensure we are looking at 
+    # the person who actually sat in the seat for that game.
     query = """
-        SELECT d.deck_name, 
-               COUNT(part.participant_id) as games, 
-               SUM(part.is_winner) as wins
-        FROM decks d
-        JOIN participants part ON d.deck_id = part.deck_id
-        JOIN players p ON d.player_id = p.player_id
+        SELECT 
+            d.deck_name, 
+            COUNT(part.participant_id) as games, 
+            SUM(part.is_winner) as wins
+        FROM participants part
+        JOIN players p ON part.player_id = p.player_id
+        JOIN decks d ON part.deck_id = d.deck_id
         WHERE p.player_name = ?
         GROUP BY d.deck_name
         HAVING games > 0
     """
     df = pd.read_sql(query, conn, params=(player_name,))
     conn.close()
+    
     if not df.empty:
+        # Standardizing the win rate calculation
         df['win_rate'] = (df['wins'] / df['games'] * 100).round(1)
+        # Rename columns for a cleaner Streamlit UI
+        df.columns = ['Deck Name', 'Games Played', 'Total Wins', 'Win Rate %']
     return df
 
 # Dropdown to select player

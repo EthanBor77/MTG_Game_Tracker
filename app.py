@@ -2,7 +2,7 @@ import streamlit as st
 
 # 1. Define the page objects pointing to your files
 home_page = st.Page(
-    "app_logic.py", 
+    "pages/app_logic.py", 
     title="Group Leaderboard", 
     icon="🏆", 
     default=True

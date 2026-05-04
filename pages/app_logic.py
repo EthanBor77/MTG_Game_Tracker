@@ -5,7 +5,7 @@ import sqlite3
 st.set_page_config(page_title="MTG Stats - Home", layout="wide")
 
 st.title("🏆 MTG Playgroup Leaderboard")
-st.markdown("### Welcome to the Auburn Hills Commander League")
+# st.markdown("### Welcome to the Auburn Hills Commander League")
 
 def get_data():
     conn = sqlite3.connect("mtg_stats.db")
