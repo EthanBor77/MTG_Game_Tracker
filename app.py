@@ -9,7 +9,7 @@ home_page = st.Page(
 )
 
 deck_page = st.Page(
-    "pages/01_Deck_Stats.py", 
+    "pages/deck_stats.py", 
     title="Deck Performance", 
     icon="🎴"
 )
