@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import sqlite3
+import altair as alt
 
 st.set_page_config(page_title="Player Trends", layout="wide")
 st.title("📈 Win Rate Over Time")
@@ -52,7 +53,20 @@ if not players_df.empty:
         c2.metric("Games Played", len(history_df))
 
         st.subheader("Performance Trend")
-        st.line_chart(history_df, x="game_number", y="Win Rate %")
+
+        # Create the Altair Chart for precise axis control
+        chart = alt.Chart(history_df).mark_line(
+            point=True,      # Adds dots to each game for better visibility
+            color='#29b5e8'  # Matches your previous blue
+        ).encode(
+            x=alt.X('game_number:Q', title='Game Number'),
+            y=alt.Y('Win Rate %:Q', title='Win Rate %', scale=alt.Scale(domain=[0, 100])),
+            tooltip=['game_number', 'Win Rate %', 'game_date']
+        ).interactive()      # Allows Kellen or Troy to zoom in if they want
+
+        st.altair_chart(chart, use_container_width=True)
+        
+        st.caption("The Y-axis is locked at 0-100% to provide a true perspective of overall performance.")
     else:
         # DEBUG: This will show in your terminal/console
         print(f"Query returned 0 rows for Player ID: {selected_id}")
