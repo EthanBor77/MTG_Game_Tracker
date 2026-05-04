@@ -74,7 +74,7 @@ try:
     c1.metric("Total Games", total_g)
     c2.metric("Avg. Game Length", f"Turn {avg_e:.1f}")
     c3.metric("Avg. First Blood", f"Turn {avg_f:.1f}")
-    c4.metric("Avg. Survival Gap", f"{avg_gap:.1f} Turns")
+    c4.metric("Avg. Turns After First Blood", f"{avg_gap:.1f} Turns")
 
     st.divider()
 
@@ -111,7 +111,7 @@ try:
     #             f"the game lasts another **{avg_gap:.1f} turns**. ")
     # else:
     #     st.warning("No timing data found. Ensure 'first_blood_turn' and 'end_turn' are populated.")
-    
+
 
     # --- META INSIGHTS (The No-Graph Replacement) ---
     st.subheader("⏱️ Game Pace Analysis")
@@ -127,7 +127,7 @@ try:
         if avg_gap > 4:
             st.warning("⚠️ **High Survival Gap:** The group might be 'durdling' after the first kill. Consider more win-cons!")
         else:
-            st.success("✅ **Efficient Finishing:** Your group is great at closing games once the first person falls.")
+            st.success("✅ **Efficient Finishing:** Your group is great at closing games once the first person falls. (I'm Proud of You!)")
 
 except Exception as e:
     st.error(f"Error generating seating stats: {e}")
