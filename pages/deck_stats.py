@@ -41,7 +41,11 @@ selected_player = st.selectbox("Select a Player to see their decks:", player_lis
 if selected_player:
     deck_stats = get_deck_data(selected_player)
     if not deck_stats.empty:
-        st.dataframe(deck_stats.sort_values('win_rate', ascending=False), 
-                     use_container_width=True, hide_index=True)
+        # Use the NEW column name for sorting
+        st.dataframe(
+            deck_stats.sort_values('Win Rate %', ascending=False), 
+            width="stretch",  # Updated from use_container_width=True
+            hide_index=True
+        )
     else:
         st.info(f"No game data found for decks owned by {selected_player}.")
