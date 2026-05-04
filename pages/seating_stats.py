@@ -83,7 +83,7 @@ try:
     c1.metric("Total Games", total_g)
     c2.metric("Avg. Game Length", f"Turn {avg_e:.1f}")
     c3.metric("Avg. First Blood", f"Turn {avg_f:.1f}")
-    c4.metric("Avg. Survival Gap", f"{avg_gap:.1f} Turns")
+    c4.metric("Avg. Time after First Blood", f"{avg_gap:.1f} Turns")
 
     st.divider()
 
@@ -105,15 +105,21 @@ try:
     # --- SURVIVAL WINDOW SECTION ---
     st.subheader("⏱️ The Survival Window")
     if not survival.empty:
-        # Visualizing the gap between First Blood and Game End
-        # We sort by when first blood happened to see trends
-        chart_data = survival[['first_blood_turn', 'end_turn']].sort_values('first_blood_turn').reset_index(drop=True)
+        # Prepare the data for charting
+        # We rename the columns specifically so they look good in the legend
+        chart_data = survival[['first_blood_turn', 'end_turn']].copy()
+        chart_data.columns = ['First Blood Turn', 'Final Turn']
+        chart_data = chart_data.sort_values('First Blood Turn').reset_index(drop=True)
         
-        st.area_chart(chart_data)
+        # Display the chart with custom colors
+        # Red for First Blood, and a neutral color for the Final Turn
+        st.area_chart(
+            chart_data, 
+            color=["#FF0000", "#29b5e8"]  # Hex for Red and Streamlit Blue
+        )
         
         st.info(f"💡 **Meta Insight:** On average, once the first player is eliminated on **Turn {avg_f:.1f}**, "
-                f"the game lasts another **{avg_gap:.1f} turns**. "
-                "This is the window where eliminated players are waiting for the next match!")
+                f"the game lasts another **{avg_gap:.1f} turns**. ")
     else:
         st.warning("No timing data found. Ensure 'first_blood_turn' and 'end_turn' are populated.")
 
