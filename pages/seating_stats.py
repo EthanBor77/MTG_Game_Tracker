@@ -105,17 +105,15 @@ try:
     # --- SURVIVAL WINDOW SECTION ---
     st.subheader("⏱️ The Survival Window")
     if not survival.empty:
-        # Prepare the data for charting
-        # We rename the columns specifically so they look good in the legend
-        chart_data = survival[['first_blood_turn', 'end_turn']].copy()
-        chart_data.columns = ['First Blood Turn', 'Final Turn']
+        # Swap the column order: Final Turn first, then First Blood Turn
+        chart_data = survival[['end_turn', 'first_blood_turn']].copy()
+        chart_data.columns = ['Final Turn', 'First Blood Turn']
         chart_data = chart_data.sort_values('First Blood Turn').reset_index(drop=True)
         
-        # Display the chart with custom colors
-        # Red for First Blood, and a neutral color for the Final Turn
+        # Color mapping: Blue for the background (Final Turn), Red for the foreground (First Blood)
         st.area_chart(
             chart_data, 
-            color=["#FF0000", "#29b5e8"]  # Hex for Red and Streamlit Blue
+            color=["#29b5e8", "#FF0000"] 
         )
         
         st.info(f"💡 **Meta Insight:** On average, once the first player is eliminated on **Turn {avg_f:.1f}**, "
