@@ -14,8 +14,14 @@ deck_page = st.Page(
     icon="🎴"
 )
 
+seating_page = st.Page(
+    "pages/seating_stats.py", 
+    title="Turn Order Analysis", 
+    icon="🪑"
+)
+
 # 2. Create the navigation structure
-pg = st.navigation([home_page, deck_page])
+pg = st.navigation([home_page, deck_page, seating_page])
 
 # 3. Run the navigation
 pg.run()
