@@ -32,7 +32,7 @@ try:
     cols = st.columns(len(data))
     for i, (index, row) in enumerate(data.iterrows()):
         # Using the column names defined in the SQL query
-        cols[i].metric(row['Player'], f"{row['Win Rate %']:.2f}%", f"{row['Total Wins']} Wins")
+        cols[i].metric(row['Player'], f"{row['Win Rate %']:.0f}%", f"{row['Total Wins']} Wins")
     
     st.subheader("Current Standings")
     
