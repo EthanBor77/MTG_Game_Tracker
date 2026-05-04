@@ -20,8 +20,20 @@ seating_page = st.Page(
     icon="🪑"
 )
 
+player_page = st.Page(
+    "pages/player_trends.py", 
+    title="Player Trends", 
+    icon="📈"
+)
+
+fun_stats_page = st.Page(
+    "pages/fun_stats.py",
+    title="Fun Stats",
+    icon="🎉"
+)
+
 # 2. Create the navigation structure
-pg = st.navigation([home_page, deck_page, seating_page])
+pg = st.navigation([home_page, deck_page, seating_page, player_page])
 
 # 3. Run the navigation
 pg.run()
