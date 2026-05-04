@@ -65,8 +65,6 @@ if not players_df.empty:
         ).interactive()      # Allows Kellen or Troy to zoom in if they want
 
         st.altair_chart(chart, use_container_width=True)
-        
-        st.caption("The Y-axis is locked at 0-100% to provide a true perspective of overall performance.")
     else:
         # DEBUG: This will show in your terminal/console
         print(f"Query returned 0 rows for Player ID: {selected_id}")
