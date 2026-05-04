@@ -14,7 +14,6 @@ def get_all_meta_stats():
     conn = get_connection()
     
     # 1. High Level Totals & Averages
-    # Pulling from 'games' table based on your 140+ logged games
     meta_query = """
         SELECT 
             COUNT(*) as total_games,
@@ -24,32 +23,48 @@ def get_all_meta_stats():
     """
     meta_df = pd.read_sql(meta_query, conn)
     
-    # 2. Player Count Distribution (3-5 players)
-    pod_dist_query = "SELECT player_count, COUNT(*) as count FROM games GROUP BY player_count"
+    # 2. Player Count Distribution (Calculated from participants)
+    # We group by game_id to see how many players were in each session
+    pod_dist_query = """
+        SELECT player_count, COUNT(*) as count 
+        FROM (
+            SELECT game_id, COUNT(player_id) as player_count 
+            FROM participants 
+            GROUP BY game_id
+        ) 
+        GROUP BY player_count
+    """
     pod_dist_df = pd.read_sql(pod_dist_query, conn)
     
     # 3. Win Rate by Seat vs. Pod Size
+    # We use a Common Table Expression (CTE) to find the pod size for every game
     pod_seat_query = """
+        WITH GameSizes AS (
+            SELECT game_id, COUNT(player_id) as player_count
+            FROM participants
+            GROUP BY game_id
+        )
         SELECT 
-            g.player_count, 
+            gs.player_count, 
             p.turn_order, 
             COUNT(*) as total_seats, 
             SUM(p.is_winner) as wins
-        FROM games g
-        JOIN participants p ON g.game_id = p.game_id
+        FROM participants p
+        JOIN GameSizes gs ON p.game_id = gs.game_id
         WHERE p.turn_order IS NOT NULL
-        GROUP BY g.player_count, p.turn_order
+        GROUP BY gs.player_count, p.turn_order
     """
     pod_seat_df = pd.read_sql(pod_seat_query, conn)
     pod_seat_df['Win Rate %'] = (pod_seat_df['wins'] / pod_seat_df['total_seats'] * 100).round(2)
 
     # 4. Most Common Turn of Death
+    # Note: If you haven't added a 'turn_out' column to participants yet,
+    # this will return an empty dataframe or error. 
+    # For now, I'll use end_turn from the games table as a fallback for the winner.
     death_query = """
-        SELECT turn_out, COUNT(*) as death_count
-        FROM participants
-        WHERE is_winner = 0 AND turn_out IS NOT NULL
-        GROUP BY turn_out
-        ORDER BY turn_out
+        SELECT end_turn as turn_out, COUNT(*) as death_count
+        FROM games
+        GROUP BY end_turn
     """
     death_df = pd.read_sql(death_query, conn)
     
