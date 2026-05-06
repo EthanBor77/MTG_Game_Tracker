@@ -131,7 +131,31 @@ def log_game():
         for p_id, d_id, win, turn in participants_data:
             cursor.execute("INSERT INTO participants (player_id, game_id, deck_id, is_winner, turn_order) VALUES (?, ?, ?, ?, ?)", 
                            (p_id, game_id, d_id, win, turn))
+        
+        conn.commit() # Ensure data is saved before querying it back
         print("\nMatch successfully logged!")
+
+        # 5. NEW: Display the logged game in Export format
+        print("\n--- Summary of Logged Game ---")
+        cursor.execute("""
+            SELECT g.game_id, g.game_date, p.player_name, d.deck_name, part.is_winner, g.win_condition
+            FROM games g
+            JOIN participants part ON g.game_id = part.game_id
+            JOIN players p ON part.player_id = p.player_id
+            JOIN decks d ON part.deck_id = d.deck_id
+            WHERE g.game_id = ?
+            ORDER BY part.turn_order ASC
+        """, (game_id,))
+        rows = cursor.fetchall()
+
+        if rows:
+            print(f"{'ID':<4} | {'Date':<12} | {'Player':<12} | {'Result':<8} | {'Deck'}")
+            print("-" * 80)
+            for r in rows:
+                g_id, g_date, p_name, d_name, is_win, w_con = r
+                res = "WINNER" if is_win else "---"
+                print(f"{g_id:<4} | {g_date:<12} | {p_name:<12} | {res:<8} | {d_name}")
+            print("-" * 80)
 
 def view_recent_games():
     """Displays the last 5 games in a readable format."""

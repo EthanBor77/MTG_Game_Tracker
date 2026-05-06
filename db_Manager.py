@@ -57,28 +57,71 @@ def create_database_backup():
     except sqlite3.Error as e:
         print(f"❌ Backup failed: {e}")
 
+def nuke_database():
+    """Drops all tables from the database after multiple confirmations."""
+    print("\n⚠️ WARNING: You are about to DELETE all data (Players, Decks, Games, Participants).")
+    
+    # First Check
+    confirm1 = input("Are you absolutely sure? (y/n): ").lower()
+    if confirm1 != 'y':
+        print("Nuke cancelled.")
+        return
+
+    # Second Check (Manual Type)
+    confirm2 = input("Type 'DELETE ALL' to confirm: ")
+    if confirm2 != 'DELETE ALL':
+        print("Confirmation failed. Nuke cancelled.")
+        return
+
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+
+        # 1. Turn off foreign keys to avoid 'Foreign Key Constraint' errors while dropping
+        cursor.execute("PRAGMA foreign_keys = OFF;")
+
+        # 2. Get the names of all tables in the database
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
+        tables = cursor.fetchall()
+
+        for table in tables:
+            table_name = table[0]
+            cursor.execute(f"DROP TABLE IF EXISTS {table_name};")
+            print(f"Dropped table: {table_name}")
+
+        conn.commit()
+        print("\n💥 Success: The database has been wiped clean.")
+
+    except sqlite3.Error as e:
+        print(f"❌ Error during nuke: {e}")
+    finally:
+        if conn:
+            conn.close()
+
 def main():
     db_name = "mtg_stats.db"
     
-    print("--- MTG SQLite Database Manager ---")
+    print("\n--- MTG SQLite Database Manager ---")
     print("1. Initialize Database (Run createDatabase.sql)")
     print("2. Input Players and Their Decks (Run input_old_data.sql)")
     print("3. Check Games (Run checkGames.sql)")
     print("4. Create Database Backup")
-    print("5. Exit")
+    print("5. NUKE DATABASE (Reset Everything)")
+    print("6. Exit")
     
-    choice = input("\nSelect an option (1-5): ")
+    choice = input("\nSelect an option (1-6): ")
 
     if choice == '1':
         run_sql_script(db_name, 'createDatabase.sql')
     elif choice == '2':
-        #print("That option is currently disabled")
         run_sql_script(db_name, 'input_old_data.sql')
     elif choice == '3':
         run_sql_script(db_name, 'checkGames.sql')
     elif choice == '4':
         create_database_backup()
     elif choice == '5':
+        nuke_database()
+    elif choice == '6':
         print("Exiting...")
     else:
         print("Invalid choice.")
