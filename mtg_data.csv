@@ -1,70 +1,70 @@
 ID,Post date,Player 1,Player 2,Player 3,Player 4,Player 5,Deck 1,Deck 2,Deck 3,Deck 4,Deck 5,Winner Player,Winner Name,Winner Deck,First Blood,Ended On,Win Con
 1,11/15/2025,Kellen,Troy,Alex,Ethan,,"Y'shtola, Night's Blessed",Belisarius Cawl,Felix Five Boots,"Octavia, Living Thesis",,Player 1,Kellen,"Y'shtola, Night's Blessed",11,11,Burn
-2,11/15/2025,Ethan,Kellen,Troy,Alex,,"Alela, Cunning Conqueror","Ardbert, Warrior of Darkness",Belisarius Cawl,Ulalek,,Player 1,Ethan,"Alela, Cunning Conqueror",11,11,Combat
-3,11/15/2025,Troy,Alex,Ethan,Kellen,,Tayam,"Optimus Prime, Hero","Abdel Adrian, Gorion's Ward",Muldrotha,,Player 1,Troy,Tayam,5,5,Combo
-4,11/15/2025,Kellen,Troy,Alex,Ethan,,Muldrotha,Tayam,"Optimus Prime, Hero","Abdel Adrian, Gorion's Ward",,Player 2,Troy,Tayam,9,9,Burn
+2,11/15/2025,Ethan,Kellen,Troy,Alex,,"Alela, Cunning Conqueror","Ardbert, Warrior of Darkness",Belisarius Cawl,"Ulalek, Fused Atrocity",,Player 1,Ethan,"Alela, Cunning Conqueror",11,11,Combat
+3,11/15/2025,Troy,Alex,Ethan,Kellen,,"Tayam, Luminous Enigma","Optimus Prime, Hero","Abdel Adrian, Gorion's Ward","Muldrotha, the Gravetide",,Player 1,Troy,"Tayam, Luminous Enigma",5,5,Combo
+4,11/15/2025,Kellen,Troy,Alex,Ethan,,"Muldrotha, the Gravetide","Tayam, Luminous Enigma","Optimus Prime, Hero","Abdel Adrian, Gorion's Ward",,Player 2,Troy,"Tayam, Luminous Enigma",9,9,Burn
 5,11/25/2025,Kellen,Troy,Colt,Ethan,,"Hearthhull, the Worldseed","The Master, Transcendent","Wilson, Refined Grizzly",Zimone and Dina,,Player 2,Troy,"The Master, Transcendent",7,12,Burn
-6,11/25/2025,Kellen,Troy,Alex,Ethan,Rohan,"Brimaz, Blight of Oreskos","Deathleaper, Terror Weapon",Vial Smasher + Kydele,Akiri + Silas,Omnath,Player 5,Rohan,Omnath,7,10,Combat
-7,11/25/2025,Rohan,Kellen,Troy,Alex,Ethan,Muldrotha,"Obuun, Mul Daya Ancestor","Dogmeat, Ever Loyal",Nicol Bolas,Akiri + Silas,Player 4,Alex,Nicol Bolas,10,10,Combo
+6,11/25/2025,Kellen,Troy,Alex,Ethan,Rohan,"Brimaz, Blight of Oreskos","Deathleaper, Terror Weapon",Vial Smasher + Kydele,Akiri + Silas,"Omnath, Locus of Creation",Player 5,Rohan,"Omnath, Locus of Creation",7,10,Combat
+7,11/25/2025,Rohan,Kellen,Troy,Alex,Ethan,"Muldrotha, the Gravetide","Obuun, Mul Daya Ancestor","Dogmeat, Ever Loyal","Nicol Bolas, the Ravager",Akiri + Silas,Player 4,Alex,"Nicol Bolas, the Ravager",10,10,Combo
 8,11/25/2025,Rohan,Kellen,Ethan,,,"Alela, Cunning Conqueror",The Ur-Dragon,Zimone and Dina,,,Player 2,Kellen,The Ur-Dragon,11,11,Combat
 9,11/30/2025,Troy,Alex,Ethan,,,"Grolnok, the Omnivore","Inspirit, Flagship Vessel","Abdel Adrian, Gorion's Ward",,,Player 3,Ethan,"Abdel Adrian, Gorion's Ward",11,11,Combat
-10,11/30/2025,Kellen,Troy,Alex,Ethan,,"Betor, Ancestor's Voice","Jon Irenicus, Shattered One",Teval,"Stella Lee, Wild Card",,Player 4,Ethan,"Stella Lee, Wild Card",8,8,Storm
-11,11/30/2025,Troy,Alex,Ethan,Kellen,,Dreadmaw,Tura Kennerud,Akiri + Silas,"Betor, Ancestor's Voice",,Player 2,Alex,Tura Kennerud,11,10,Combat
-12,12/16/2025,Troy,Colt,Ethan,Rohan,,Patron of the Moon,"Chatterfang, Squirrel General",Ashling,"Yuma, Proud Protector",,Player 3,Ethan,Ashling,7,7,Storm
+10,11/30/2025,Kellen,Troy,Alex,Ethan,,"Betor, Ancestor's Voice","Jon Irenicus, Shattered One","Teval, the Balanced Scale","Stella Lee, Wild Card",,Player 4,Ethan,"Stella Lee, Wild Card",8,8,Storm
+11,11/30/2025,Troy,Alex,Ethan,Kellen,,The Colossal Dreadmaw,Tura Kennerud,Akiri + Silas,"Betor, Ancestor's Voice",,Player 2,Alex,Tura Kennerud,11,10,Combat
+12,12/16/2025,Troy,Colt,Ethan,Rohan,,Patron of the Moon,"Chatterfang, Squirrel General","Ashling, Flame Dancer","Yuma, Proud Protector",,Player 3,Ethan,"Ashling, Flame Dancer",7,7,Storm
 13,12/16/2025,Colt,Ethan,Rohan,Troy,,"Wilson, Refined Grizzly","Mirko, Obsessive Theorist","Baru, Wurmspeaker","Raggadragga, Goreguts Boss",,Player 2,Ethan,"Mirko, Obsessive Theorist",12,11,Combat
 14,12/16/2025,Colt,Ethan,Rohan,Troy,,"Wilson, Refined Grizzly","Octavia, Living Thesis","Stella Lee, Wild Card","Mortarion, Daemon Primarch",,Player 4,Troy,"Mortarion, Daemon Primarch",8,7,Combat
-15,12/18/2025,Kellen,Alex,Ethan,Troy,,Mendicant,"Zoraline, Cosmos Caller","Mirko, Obsessive Theorist",Slinza,,Player 2,Alex,"Zoraline, Cosmos Caller",12,13,Ping
-16,12/18/2025,Ethan,Troy,Kellen,Alex,,Zimone and Dina,"Baru, Wurmspeaker","Katara, the Fearless",Tifa,,Player 1,Ethan,Zimone and Dina,8,9,Combat
-17,12/18/2025,Ethan,Troy,Kellen,Alex,,"Octavia, Living Thesis","Baru, Wurmspeaker","Jarad, Golgari Lich Lord",Tifa,,Player 3,Kellen,"Jarad, Golgari Lich Lord",11,11,Burn
-18,1/3/2026,Ethan,Kellen,Alex,Troy,,"Alela, Cunning Conqueror","Zaxara, the Exemplary",Swarmweaver,Minwu,,Player 1,Ethan,"Alela, Cunning Conqueror",11,11,Combat
-19,1/3/2026,Alex,Troy,Ethan,Kellen,,Sefris,Imotekh,Tymna + Dargo,Kresh the Bloodbraided,,Player 3,Ethan,Tymna + Dargo,12,12,Ping
-20,1/3/2026,Kellen,Alex,Troy,Ethan,,"Katara, the Fearless",Hakbal,Sliver Legion,"Killian, Ink Duelist",,Player 3,Troy,Sliver Legion,6,6,Combat
-21,1/3/2026,Alex,Troy,Ethan,Kellen,,Kuja,Dreadmaw,"Mirko, Obsessive Theorist","Kellan, the Kid",,Player 3,Ethan,"Mirko, Obsessive Theorist",7,8,Combat
+15,12/18/2025,Kellen,Alex,Ethan,Troy,,"Mendicant Core, Guidelight","Zoraline, Cosmos Caller","Mirko, Obsessive Theorist","Slinza, the Spiked Stampede",,Player 2,Alex,"Zoraline, Cosmos Caller",12,13,Ping
+16,12/18/2025,Ethan,Troy,Kellen,Alex,,Zimone and Dina,"Baru, Wurmspeaker","Katara, the Fearless","Tifa, Martial Artist",,Player 1,Ethan,Zimone and Dina,8,9,Combat
+17,12/18/2025,Ethan,Troy,Kellen,Alex,,"Octavia, Living Thesis","Baru, Wurmspeaker","Jarad, Golgari Lich Lord","Tifa, Martial Artist",,Player 3,Kellen,"Jarad, Golgari Lich Lord",11,11,Burn
+18,1/3/2026,Ethan,Kellen,Alex,Troy,,"Alela, Cunning Conqueror","Zaxara, the Exemplary",The Swarmweaver,"Minwu, White Mage",,Player 1,Ethan,"Alela, Cunning Conqueror",11,11,Combat
+19,1/3/2026,Alex,Troy,Ethan,Kellen,,Sefris of the Hidden Ways,Imotekh the Stormlord,Tymna + Dargo,Kresh the Bloodbraided,,Player 3,Ethan,Tymna + Dargo,12,12,Ping
+20,1/3/2026,Kellen,Alex,Troy,Ethan,,"Katara, the Fearless",Hakbal of the Surging Soul,Sliver Legion,"Killian, Ink Duelist",,Player 3,Troy,Sliver Legion,6,6,Combat
+21,1/3/2026,Alex,Troy,Ethan,Kellen,,"Kuja, Genome Sorcerer",The Colossal Dreadmaw,"Mirko, Obsessive Theorist","Kellan, the Kid",,Player 3,Ethan,"Mirko, Obsessive Theorist",7,8,Combat
 22,1/3/2026,Alex,Troy,Ethan,Kellen,,Vial Smasher + Kydele,Magus Lucea Kane,"Abdel Adrian, Gorion's Ward","Otrimi, the Ever-Playful",,Player 1,Alex,Vial Smasher + Kydele,8,8,Combat
-23,1/9/2026,Alex,Ethan,Kellen,Troy,,Thantis,Tymna + Dargo,"Golbez, Crystal Collector","Grolnok, the Omnivore",,Player 1,Alex,Thantis,13,14,Combat
-24,1/9/2026,Troy,Alex,Ethan,Kellen,,Be'lakor,Dr. Eggman,Zimone and Dina,Sovereign Okinec Ahau,,Player 3,Ethan,Zimone and Dina,10,10,Combat
-25,1/9/2026,Troy,Alex,Ethan,Kellen,,"Dogmeat, Ever Loyal",Shadrix,"Octavia, Living Thesis","Katara, the Fearless",,Player 4,Kellen,"Katara, the Fearless",10,11,Combat
-26,1/10/2026,Troy,Alex,Ethan,Kellen,,Kadena,Dr. Eggman,Tymna + Dargo,The Emperor of Palamecia,,Player 3,Ethan,Tymna + Dargo,10,11,Combat
-27,1/10/2026,Kellen,Troy,Alex,Ethan,,"Myrkul, Lord of Bones",Belisarius Cawl,Gev,Akiri + Silas,,Player 4,Ethan,Akiri + Silas,8,11,Combat
-28,1/10/2026,Alex,Ethan,Kellen,Troy,,Kasla,"Yuma, Proud Protector","Obuun, Mul Daya Ancestor",Marneus,,Player 2,Ethan,"Yuma, Proud Protector",10,16,Combat
-29,1/19/2026,Kellen,Alex,Troy,Kayla,,"Ashling, the Limitless",Anti-Venom,"Hogaak, Arisen Necropolis","Octavia, Living Thesis",,Player 1,Kellen,"Ashling, the Limitless",12,12,Burn
-30,1/19/2026,Kellen,Alex,Troy,Ethan,,"Kellan, the Kid",Iroh,Lucius the Eternal,"Alela, Cunning Conqueror",,Player 4,Ethan,"Alela, Cunning Conqueror",11,11,Combat
-31,1/19/2026,Ethan,Kellen,Alex,Troy,,"Abdel Adrian, Gorion's Ward","Adrix and Nev, Twincasters","Optimus Prime, Hero",Marwyn,,Player 1,Ethan,"Abdel Adrian, Gorion's Ward",8,9,Combo
-32,1/19/2026,Kellen,Alex,Troy,Ethan,,Mendicant,Gev,"Liberty Prime, Recharged",Tymna + Dargo,,Player 1,Kellen,Mendicant,6,7,Combat
-33,1/23/2026,Ethan,Troy,Kellen,Alex,,"Maralen, Fae Ascendant",Sin,"Hearthhull, the Worldseed",Spiderman,,Player 3,Kellen,"Hearthhull, the Worldseed",10,11,Burn
+23,1/9/2026,Alex,Ethan,Kellen,Troy,,"Thantis, the Warweaver",Tymna + Dargo,"Golbez, Crystal Collector","Grolnok, the Omnivore",,Player 1,Alex,"Thantis, the Warweaver",13,14,Combat
+24,1/9/2026,Troy,Alex,Ethan,Kellen,,"Be'lakor, the Dark Master",Dr. Eggman,Zimone and Dina,Sovereign Okinec Ahau,,Player 3,Ethan,Zimone and Dina,10,10,Combat
+25,1/9/2026,Troy,Alex,Ethan,Kellen,,"Dogmeat, Ever Loyal",Shadrix Silverquill,"Octavia, Living Thesis","Katara, the Fearless",,Player 4,Kellen,"Katara, the Fearless",10,11,Combat
+26,1/10/2026,Troy,Alex,Ethan,Kellen,,"Kadena, Slinking Sorcerer",Dr. Eggman,Tymna + Dargo,The Emperor of Palamecia,,Player 3,Ethan,Tymna + Dargo,10,11,Combat
+27,1/10/2026,Kellen,Troy,Alex,Ethan,,"Myrkul, Lord of Bones",Belisarius Cawl,"Gev, Scaled Scorch",Akiri + Silas,,Player 4,Ethan,Akiri + Silas,8,11,Combat
+28,1/10/2026,Alex,Ethan,Kellen,Troy,,"Kasla, the Broken Halo","Yuma, Proud Protector","Obuun, Mul Daya Ancestor",Marneus Calgar,,Player 2,Ethan,"Yuma, Proud Protector",10,16,Combat
+29,1/19/2026,Kellen,Alex,Troy,Kayla,,"Ashling, the Limitless","Anti-Venom, Horrifying Healer","Hogaak, Arisen Necropolis","Octavia, Living Thesis",,Player 1,Kellen,"Ashling, the Limitless",12,12,Burn
+30,1/19/2026,Kellen,Alex,Troy,Ethan,,"Kellan, the Kid","Iroh, Grand Lotus",Lucius the Eternal,"Alela, Cunning Conqueror",,Player 4,Ethan,"Alela, Cunning Conqueror",11,11,Combat
+31,1/19/2026,Ethan,Kellen,Alex,Troy,,"Abdel Adrian, Gorion's Ward","Adrix and Nev, Twincasters","Optimus Prime, Hero","Marwyn, the Nurturer",,Player 1,Ethan,"Abdel Adrian, Gorion's Ward",8,9,Combo
+32,1/19/2026,Kellen,Alex,Troy,Ethan,,"Mendicant Core, Guidelight","Gev, Scaled Scorch","Liberty Prime, Recharged",Tymna + Dargo,,Player 1,Kellen,"Mendicant Core, Guidelight",6,7,Combat
+33,1/23/2026,Ethan,Troy,Kellen,Alex,,"Maralen, Fae Ascendant","Sin, Spira's Punishment","Hearthhull, the Worldseed",Amazing Spider-Man,,Player 3,Kellen,"Hearthhull, the Worldseed",10,11,Burn
 34,1/23/2026,Kayla,Colt,Troy,Ethan,,High Perfect Morcant,"Wilson, Refined Grizzly","Hogaak, Arisen Necropolis","Gut, True Soul Zealot",,Player 3,Troy,"Hogaak, Arisen Necropolis",8,9,Burn
 35,1/23/2026,Rohan,Kellen,Alex,,,Dr. Eggman,"Ardbert, Warrior of Darkness",Reaper King,,,Player 3,Alex,Reaper King,9,10,Combat
-36,1/23/2026,Alex,Troy,Ethan,,,The Reaper,"Liberty Prime, Recharged","Gut, True Soul Zealot",,,Player 1,Alex,The Reaper,8,11,Combat
-37,1/23/2026,Rohan,Kellen,Colt,,,"Omo, Queen of Vesuva",Obeka,"Chatterfang, Squirrel General",,,Player 3,Colt,"Chatterfang, Squirrel General",6,7,Combat
-38,1/23/2026,Kellen,Ethan,Rohan,,,The Emperor of Palamecia,"Alela, Cunning Conqueror",Ral,,,Player 2,Ethan,"Alela, Cunning Conqueror",8,8,Combat
-39,1/23/2026,Alex,Troy,Colt,,,Tura,Jon Irenicus,"Chatterfang, Squirrel General",,,Player 3,Colt,"Chatterfang, Squirrel General",9,10,Burn
-40,1/23/2026,Troy,Ethan,Kellen,,,Dreadmaw,"Maralen, Fae Ascendant",The Ur-Dragon,,,Player 2,Ethan,"Maralen, Fae Ascendant",10,10,Combat
+36,1/23/2026,Alex,Troy,Ethan,,,"The Reaper, King No More","Liberty Prime, Recharged","Gut, True Soul Zealot",,,Player 1,Alex,"The Reaper, King No More",8,11,Combat
+37,1/23/2026,Rohan,Kellen,Colt,,,"Omo, Queen of Vesuva","Obeka, Splitter of Seconds","Chatterfang, Squirrel General",,,Player 3,Colt,"Chatterfang, Squirrel General",6,7,Combat
+38,1/23/2026,Kellen,Ethan,Rohan,,,The Emperor of Palamecia,"Alela, Cunning Conqueror","Ral, Monsoon Mage",,,Player 2,Ethan,"Alela, Cunning Conqueror",8,8,Combat
+39,1/23/2026,Alex,Troy,Colt,,,Tura Kennerud,"Jon Irenicus, Shattered One","Chatterfang, Squirrel General",,,Player 3,Colt,"Chatterfang, Squirrel General",9,10,Burn
+40,1/23/2026,Troy,Ethan,Kellen,,,The Colossal Dreadmaw,"Maralen, Fae Ascendant",The Ur-Dragon,,,Player 2,Ethan,"Maralen, Fae Ascendant",10,10,Combat
 41,2/1/2026,Troy,Kayla,Ethan,Alex,,"Karumonix, the Rat King",High Perfect Morcant,"Gut, True Soul Zealot","Clive, Ifrit's Dominant",,Player 3,Ethan,"Gut, True Soul Zealot",9,9,Burn
-42,2/1/2026,Kellen,Alex,Troy,Kayla,Ethan,The Lord of Pain,Spiderman,Thelon,High Perfect Morcant,Ms. Bumbleflower,Player 2,Alex,Spiderman,9,11,Combat
-43,2/1/2026,Kellen,Ethan,Alex,Troy,,"Zaxara, the Exemplary","Maralen, Fae Ascendant",The Reaper,"Jon Irenicus, Shattered One",,Player 2,Ethan,"Maralen, Fae Ascendant",10,10,Combat
-44,2/1/2026,Kellen,Ethan,Alex,Troy,,"Ashling, the Limitless",Tymna + Dargo,Thantis,Lucius the Eternal,,Player 1,Kellen,"Ashling, the Limitless",10,11,Combat
+42,2/1/2026,Kellen,Alex,Troy,Kayla,Ethan,The Lord of Pain,Amazing Spider-Man,Thelon of Havenwood,High Perfect Morcant,Ms. Bumbleflower,Player 2,Alex,Amazing Spider-Man,9,11,Combat
+43,2/1/2026,Kellen,Ethan,Alex,Troy,,"Zaxara, the Exemplary","Maralen, Fae Ascendant","The Reaper, King No More","Jon Irenicus, Shattered One",,Player 2,Ethan,"Maralen, Fae Ascendant",10,10,Combat
+44,2/1/2026,Kellen,Ethan,Alex,Troy,,"Ashling, the Limitless",Tymna + Dargo,"Thantis, the Warweaver",Lucius the Eternal,,Player 1,Kellen,"Ashling, the Limitless",10,11,Combat
 45,2/6/2026,Rohan,Troy,Ethan,Alex,,"Stella Lee, Wild Card","Karumonix, the Rat King",Merry + Pippin,"Grimlock, Dinobot Leader",,Player 1,Rohan,"Stella Lee, Wild Card",11,12,Combat
-46,2/6/2026,Troy,Ethan,Alex,Rohan,,"Karumonix, the Rat King",Tymna + Dargo,Anti-Venom,"Maralen, Fae Ascendant",,Player 2,Ethan,Tymna + Dargo,10,13,Ping
-47,2/13/2026,Rohan,Troy,Kellen,Alex,,Shadrix,Patron of the Moon,"Betor, Ancestor's Voice",Karador,,Player 3,Kellen,"Betor, Ancestor's Voice",7,8,Burn
-48,2/13/2026,Alex,Rohan,Troy,Kellen,,Karador,"Syr Gwyn, Hero of Ashvale",Red Terror,"Brimaz, Blight of Oreskos",,Player 3,Troy,Red Terror,8,10,Burn
-49,2/13/2026,Troy,Kellen,Alex,Rohan,,"Grolnok, the Omnivore","Katara, the Fearless","Clive, Ifrit's Dominant",Evra,,Player 1,Troy,"Grolnok, the Omnivore",12,13,Combat
-50,2/13/2026,Troy,Kellen,Alex,Rohan,,"Baru, Wurmspeaker","Terra, Magical Adept (Kellen)",The Reaper,Teval,,Player 3,Alex,The Reaper,12,14,Combat
-51,2/20/2026,Troy,Kellen,Alex,Kayla,Ethan,Imotekh,Blue + Owen,Eirdu,"Mirko, Obsessive Theorist",Merry + Pippin,Player 3,Alex,Eirdu,11,12,Combat
+46,2/6/2026,Troy,Ethan,Alex,Rohan,,"Karumonix, the Rat King",Tymna + Dargo,"Anti-Venom, Horrifying Healer","Maralen, Fae Ascendant",,Player 2,Ethan,Tymna + Dargo,10,13,Ping
+47,2/13/2026,Rohan,Troy,Kellen,Alex,,Shadrix Silverquill,Patron of the Moon,"Betor, Ancestor's Voice","Karador, Ghost Chieftain",,Player 3,Kellen,"Betor, Ancestor's Voice",7,8,Burn
+48,2/13/2026,Alex,Rohan,Troy,Kellen,,"Karador, Ghost Chieftain","Syr Gwyn, Hero of Ashvale",The Red Terror,"Brimaz, Blight of Oreskos",,Player 3,Troy,The Red Terror,8,10,Burn
+49,2/13/2026,Troy,Kellen,Alex,Rohan,,"Grolnok, the Omnivore","Katara, the Fearless","Clive, Ifrit's Dominant","Evra, Halcyon Witness",,Player 1,Troy,"Grolnok, the Omnivore",12,13,Combat
+50,2/13/2026,Troy,Kellen,Alex,Rohan,,"Baru, Wurmspeaker","Terra, Magical Adept (Kellen)","The Reaper, King No More","Teval, the Balanced Scale",,Player 3,Alex,"The Reaper, King No More",12,14,Combat
+51,2/20/2026,Troy,Kellen,Alex,Kayla,Ethan,Imotekh the Stormlord,Blue + Owen,"Eirdu, Carrier of Dawn","Mirko, Obsessive Theorist",Merry + Pippin,Player 3,Alex,"Eirdu, Carrier of Dawn",11,12,Combat
 52,2/20/2026,Ethan,Troy,Kellen,Alex,,Ms. Bumbleflower,"Jon Irenicus, Shattered One","Y'shtola, Night's Blessed",Dr. Eggman,,Player 2,Troy,"Jon Irenicus, Shattered One",11,13,Mill
-53,2/20/2026,Kayla,Ethan,Troy,Kellen,Alex,"Octavia, Living Thesis","Gut, True Soul Zealot",Dreadmaw,"Henzie ""Toolbox"" Torre",Spiderman,Player 2,Ethan,"Gut, True Soul Zealot",7,7,Ping
-54,2/20/2026,Ethan,Troy,Kellen,Kayla,,"Killian, Ink Duelist",Dreadmaw,Adirx,"Octavia, Living Thesis",,Player 2,Troy,Dreadmaw,14,15,Combat
+53,2/20/2026,Kayla,Ethan,Troy,Kellen,Alex,"Octavia, Living Thesis","Gut, True Soul Zealot",The Colossal Dreadmaw,"Henzie ""Toolbox"" Torre",Amazing Spider-Man,Player 2,Ethan,"Gut, True Soul Zealot",7,7,Ping
+54,2/20/2026,Ethan,Troy,Kellen,Kayla,,"Killian, Ink Duelist",The Colossal Dreadmaw,Adirx,"Octavia, Living Thesis",,Player 2,Troy,The Colossal Dreadmaw,14,15,Combat
 55,2/26/2026,Ethan,Kellen,Rohan,Kayla,,"Abdel Adrian, Gorion's Ward",Okaun + Zndrsplt,Akiri + Silas,Merry + Pippin,,Player 1,Ethan,"Abdel Adrian, Gorion's Ward",11,12,Combat
 56,2/26/2026,Rohan,Kayla,Ethan,Kellen,,Zimone and Dina,Tymna + Dargo,"Octavia, Living Thesis","Obuun, Mul Daya Ancestor",,Player 1,Rohan,Zimone and Dina,10,10,Combo
 57,2/26/2026,Kayla,Ethan,Kellen,,,"Mirko, Obsessive Theorist",Merry + Pippin,"Otrimi, the Ever-Playful",,,Player 1,Kayla,"Mirko, Obsessive Theorist",11,13,Combat
 58,2/27/2026,Kayla,Ethan,Troy,Rohan,,"Alela, Cunning Conqueror","Stella Lee, Wild Card",Phelddagrif,"Killian, Ink Duelist",,Player 2,Ethan,"Stella Lee, Wild Card",9,9,Storm
 59,2/27/2026,Ethan,Troy,Rohan,Kayla,,Tymna + Dargo,Phelddagrif,"Gut, True Soul Zealot","Mirko, Obsessive Theorist",,Player 3,Rohan,"Gut, True Soul Zealot",11,11,Ping
 60,2/27/2026,Rohan,Colt,Ethan,Troy,,"Stella Lee, Wild Card","Chatterfang, Squirrel General","Maralen, Fae Ascendant","Karumonix, the Rat King",,Player 1,Rohan,"Stella Lee, Wild Card",8,8,Storm
-61,3/3/2026,Rohan,Kayla,Ethan,Troy,,Akiri + Silas,"Abdel Adrian, Gorion's Ward",Green Goblin,Imotekh,,Player 2,Kayla,"Abdel Adrian, Gorion's Ward",8,8,Combo
+61,3/3/2026,Rohan,Kayla,Ethan,Troy,,Akiri + Silas,"Abdel Adrian, Gorion's Ward",Green Goblin,Imotekh the Stormlord,,Player 2,Kayla,"Abdel Adrian, Gorion's Ward",8,8,Combo
 62,3/3/2026,Troy,Rohan,Kayla,Ethan,,"Hogaak, Arisen Necropolis",Ms. Bumbleflower,"Octavia, Living Thesis",Merry + Pippin,,Player 3,Kayla,"Octavia, Living Thesis",9,12,Combat
 63,3/3/2026,Rohan,Colt,Ethan,Troy,,"Yuma, Proud Protector","Wilson, Refined Grizzly","Maralen, Fae Ascendant",Sliver Legion,,Player 4,Troy,Sliver Legion,7,7,Combat
 64,3/3/2026,Troy,Colt,Ethan,,,Lucius the Eternal,"Wilson, Refined Grizzly",Green Goblin,,,Player 1,Troy,Lucius the Eternal,10,10,Ping
 65,3/7/2026,Troy,Ethan,Kellen,Alex,,Phelddagrif,Green Goblin,Sovereign Okinec Ahau,"Yarok, the Desecrated",,Player 2,Ethan,Green Goblin,8,8,Storm
-66,3/7/2026,Kellen,Alex,Troy,Ethan,,Mendicant,Cloud Ex Soldier,"Liberty Prime, Recharged",Merry + Pippin,,Player 2,Alex,Cloud Ex Soldier,10,11,Combat
+66,3/7/2026,Kellen,Alex,Troy,Ethan,,"Mendicant Core, Guidelight","Cloud, Ex-SOLDIER","Liberty Prime, Recharged",Merry + Pippin,,Player 2,Alex,"Cloud, Ex-SOLDIER",10,11,Combat
 67,3/14/2026,Ethan,Kayla,Kellen,Troy,Alex,"Leonardo, the Balance","Octavia, Living Thesis","Jarad, Golgari Lich Lord",Captain N'ghathrod,"Syr Gwyn, Hero of Ashvale",Player 3,Kellen,"Jarad, Golgari Lich Lord",12,12,Burn
 68,3/14/2026,Alex,Ethan,Kellen,Troy,,"Clive, Ifrit's Dominant",Tymna + Dargo,The Ur-Dragon,Magus Lucea Kane,,Player 2,Ethan,Tymna + Dargo,7,9,Combat
 69,3/14/2026,Troy,Kayla,Ethan,,,"Karumonix, the Rat King","Killian, Ink Duelist","Leonardo, the Balance",,,Player 2,Kayla,"Killian, Ink Duelist",7,8,Combat

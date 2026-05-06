@@ -1,4 +1,4 @@
--- 1. Disable foreign keys so we can drop tables without errors
+-- -- 1. Disable foreign keys so we can drop tables without errors
 -- PRAGMA foreign_keys = OFF;
 
 -- -- 2. Drop existing tables if they exist

@@ -62,7 +62,7 @@ def main():
     
     print("--- MTG SQLite Database Manager ---")
     print("1. Initialize Database (Run createDatabase.sql)")
-    print("2. Update Match History (Run update_games.sql)")
+    print("2. Input Players and Their Decks (Run input_old_data.sql)")
     print("3. Check Games (Run checkGames.sql)")
     print("4. Create Database Backup")
     print("5. Exit")
@@ -72,8 +72,8 @@ def main():
     if choice == '1':
         run_sql_script(db_name, 'createDatabase.sql')
     elif choice == '2':
-        print("That option is currently disabled")
-        #run_sql_script(db_name, 'update_games.sql')
+        #print("That option is currently disabled")
+        run_sql_script(db_name, 'input_old_data.sql')
     elif choice == '3':
         run_sql_script(db_name, 'checkGames.sql')
     elif choice == '4':
