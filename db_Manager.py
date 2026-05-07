@@ -11,6 +11,10 @@ Currently supports:
 
 DB_NAME = "mtg_stats.db"
 
+def get_connection():
+    """Returns a standard sqlite3 connection object."""
+    return sqlite3.connect(DB_NAME)
+
 def run_sql_script(db_name, sql_file):
     """Executes a .sql script against the specified SQLite database."""
     if not os.path.exists(sql_file):
@@ -129,6 +133,26 @@ def migrate_game_numbers():
     print("✅ Migration complete! All games now have a sequential Game Number.")
     conn.close()
 
+def make_room_for_missing_games():
+    """Shifts game numbers up to create a gap at 47-50."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        
+        # We start at 47 and move everything up by 4
+        start_at = 47
+        gap_size = 4
+        
+        print(f"Shifting games {start_at}+ up by {gap_size}...")
+        
+        cursor.execute("""
+            UPDATE games 
+            SET game_number = game_number + ? 
+            WHERE game_number >= ?
+        """, (gap_size, start_at))
+        
+        conn.commit()
+        print("✅ Space created! Numbers 47, 48, 49, and 50 are now empty.")
+
 def main():
     db_name = "mtg_stats.db"
     
@@ -139,10 +163,10 @@ def main():
     print("4. Create Database Backup")
     print("5. NUKE DATABASE (Reset Everything)")
     #print("6. Migrate Game Numbers")
-    print("7. Exit")
-    
-    
-    choice = input("\nSelect an option (1-7): ")
+    print("7. Make Room for Missing Games (Shift 47+ up by 4)")
+    print("8. Exit")
+
+    choice = input("\nSelect an option (1-8): ")
 
     if choice == '1':
         run_sql_script(db_name, 'createDatabase.sql')
@@ -158,6 +182,9 @@ def main():
         #migrate_game_numbers()
         pass
     elif choice == '7':
+        # make_room_for_missing_games()
+        pass
+    elif choice == '8':
         print("Exiting...")
     else:
         print("Invalid choice.")
