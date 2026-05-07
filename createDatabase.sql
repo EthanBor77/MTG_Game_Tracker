@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS decks (
 
 CREATE TABLE IF NOT EXISTS games (
     game_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    game_number INTEGER,
     game_date DATE,
     first_blood_turn INTEGER,
     end_turn INTEGER,

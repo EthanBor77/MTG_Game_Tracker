@@ -98,6 +98,37 @@ def nuke_database():
         if conn:
             conn.close()
 
+# One time alter function to add game_number column to games table
+def migrate_game_numbers():
+    """Adds game_number column and populates it for existing data."""
+    conn = sqlite3.connect("mtg_stats.db")
+    cursor = conn.cursor()
+
+    try:
+        # 1. Add the column to the games table
+        print("Adding 'game_number' column...")
+        cursor.execute("ALTER TABLE games ADD COLUMN game_number INTEGER;")
+        conn.commit()
+    except sqlite3.OperationalError:
+        print("Column 'game_number' already exists. Skipping alter...")
+
+    # 2. Fetch all games in the order they were created (by game_id)
+    cursor.execute("SELECT game_id FROM games ORDER BY game_id ASC")
+    games = cursor.fetchall()
+
+    if not games:
+        print("No existing games to number.")
+        return
+
+    # 3. Loop through and assign a sequential number
+    print(f"Numbering {len(games)} existing games...")
+    for index, (g_id,) in enumerate(games, start=1):
+        cursor.execute("UPDATE games SET game_number = ? WHERE game_id = ?", (index, g_id))
+    
+    conn.commit()
+    print("✅ Migration complete! All games now have a sequential Game Number.")
+    conn.close()
+
 def main():
     db_name = "mtg_stats.db"
     
@@ -107,9 +138,11 @@ def main():
     print("3. Check Games (Run checkGames.sql)")
     print("4. Create Database Backup")
     print("5. NUKE DATABASE (Reset Everything)")
-    print("6. Exit")
+    #print("6. Migrate Game Numbers")
+    print("7. Exit")
     
-    choice = input("\nSelect an option (1-6): ")
+    
+    choice = input("\nSelect an option (1-7): ")
 
     if choice == '1':
         run_sql_script(db_name, 'createDatabase.sql')
@@ -122,6 +155,9 @@ def main():
     elif choice == '5':
         nuke_database()
     elif choice == '6':
+        #migrate_game_numbers()
+        pass
+    elif choice == '7':
         print("Exiting...")
     else:
         print("Invalid choice.")
