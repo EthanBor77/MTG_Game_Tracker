@@ -4,7 +4,7 @@ import sqlite3
 
 st.set_page_config(page_title="Seating & Game Stats", layout="wide")
 
-st.title("📊 Seating & Meta Analytics")
+st.title("📊 Pod Analytics")
 
 def get_connection():
     return sqlite3.connect("mtg_stats.db")
