@@ -125,9 +125,9 @@ try:
     with col_b:
         # Fun logic-based insight
         if avg_gap > 4:
-            st.warning("⚠️ **High Survival Gap:** The group might be 'durdling' after the first kill. Consider more win-cons!")
+            st.warning("⚠️ **High Survival Gap:** We might be 'durdling' after the first kill. Consider more win-cons or more decisive plays!")
         else:
-            st.success("✅ **Efficient Finishing:** Your group is great at closing games once the first person falls. (I'm Proud of You!)")
+            st.success("✅ **Efficient Finishing:** We're doing great at closing games once the first person falls. (I'm Proud of You!)")
 
 except Exception as e:
     st.error(f"Error generating seating stats: {e}")
