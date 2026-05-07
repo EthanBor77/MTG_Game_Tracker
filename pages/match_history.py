@@ -2,10 +2,6 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 
-import streamlit as st
-import sqlite3
-import pandas as pd
-
 def get_match_history():
     conn = sqlite3.connect("mtg_stats.db")
     query = """
@@ -21,23 +17,29 @@ def get_match_history():
     conn.close()
     return df
 
-def highlight_winner(row):
-    if row['Result'] == "🏆 Winner":
-        return ['background-color: rgba(255, 215, 0, 0.2); font-weight: bold'] * len(row)
-    return [''] * len(row)
-
 def run():
     st.title("📜 Complete Match History")
     
+    # Custom CSS to shrink the padding and font size globally for this page
+    st.markdown("""
+        <style>
+            .compact-text { font-size: 14px !important; margin-bottom: 0px; }
+            .game-header { background-color: #262730; padding: 5px 10px; border-radius: 5px; margin-top: 20px; }
+            table { width: 100%; border-collapse: collapse; font-size: 13px; }
+            th { text-align: left; border-bottom: 1px solid #444; color: #888; }
+            td { padding: 4px 8px; border-bottom: 1px dotted #333; }
+            .winner-row { background-color: rgba(255, 215, 0, 0.15); font-weight: bold; }
+            hr { margin: 1em 0 !important; }
+        </style>
+    """, unsafe_allow_html=True)
+
     df = get_match_history()
     if df.empty:
         st.warning("No games found.")
         return
 
-    # Sidebar Filter (Kept this because it's handy for 140+ games)
-    st.sidebar.header("Search")
+    # Sidebar Search
     search_player = st.sidebar.text_input("Filter by Player Name")
-    
     if search_player:
         valid_games = df[df['player_name'].str.contains(search_player, case=False)]['game_number'].unique()
         display_df = df[df['game_number'].isin(valid_games)]
@@ -46,34 +48,36 @@ def run():
 
     unique_games = display_df['game_number'].unique()
 
-    # --- THE FLAT LAYOUT ---
     for g_num in unique_games:
         game_data = display_df[display_df['game_number'] == g_num]
         meta = game_data.iloc[0]
         
-        # Determine Winner Name for the header
-        winner_row = game_data[game_data['is_winner'] == 1]
-        winner_name = winner_row['player_name'].iloc[0] if not winner_row.empty else "Draw"
+        # Header Box
+        st.markdown(f"""
+            <div class="game-header">
+                <strong>Game #{g_num}</strong> — {meta['game_date']} | 
+                <span style="color: #aaa;">FB: T{meta['first_blood_turn']} | End: T{meta['end_turn']} | {meta['win_condition']}</span>
+            </div>
+        """, unsafe_allow_html=True)
 
-        # Game Header - No expander, just a bold sub-header
-        st.subheader(f"Game #{g_num} — {meta['game_date']}")
+        # Build Manual HTML Table for maximum compactness
+        table_html = "<table><thead><tr><th>Turn</th><th>Player</th><th>Deck</th><th>Result</th></tr></thead><tbody>"
         
-        # Meta info in a single line to save vertical space
-        st.markdown(f"**Winner:** {winner_name} | **FB Turn:** {meta['first_blood_turn']} | **End Turn:** {meta['end_turn']} | **Win Con:** {meta['win_condition']}")
-
-        # Table Prep
-        table_data = game_data[['turn_order', 'player_name', 'deck_name', 'is_winner']].copy()
-        table_data['is_winner'] = table_data['is_winner'].apply(lambda x: "🏆 Winner" if x == 1 else "---")
-        table_data.columns = ['Turn', 'Player', 'Deck', 'Result']
-
-        # Apply Styling
-        styled_table = table_data.style.apply(highlight_winner, axis=1)
-
-        # Display full table (no scrolling/hiding)
-        st.table(styled_table)
+        for _, row in game_data.iterrows():
+            row_class = 'class="winner-row"' if row['is_winner'] == 1 else ""
+            res_text = "🏆 Winner" if row['is_winner'] == 1 else "---"
+            
+            table_html += f"""
+                <tr {row_class}>
+                    <td>{row['turn_order']}</td>
+                    <td>{row['player_name']}</td>
+                    <td>{row['deck_name']}</td>
+                    <td>{res_text}</td>
+                </tr>
+            """
+        table_html += "</tbody></table>"
         
-        # Strong visual break between matches
-        st.markdown("---")
+        st.markdown(table_html, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     run()
