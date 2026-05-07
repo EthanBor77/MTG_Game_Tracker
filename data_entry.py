@@ -91,6 +91,14 @@ def log_game():
         
         # 1. Game Details
         date = input("\nDate (YYYY-MM-DD): ")
+        
+        # Validation for Player Count
+        num_players_input = input("How many players (3-6+): ")
+        if not num_players_input.isdigit():
+            print("Invalid number of players.")
+            return
+        num_players = int(num_players_input)
+
         fb_turn = input("First Blood Turn: ")
         end_turn = input("End Turn: ")
         win_con = input("Win Condition: ")
@@ -99,8 +107,8 @@ def log_game():
         participants_data = []
         winners_count = 0
 
-        for i in range(1, 5):
-            print(f"\n--- Logging Player {i} of 4 ---")
+        for i in range(1, num_players + 1):
+            print(f"\n--- Logging Player {i} of {num_players} ---")
             p_id = None
             while not p_id:
                 p_id = find_item("players", "player_name", input(f"Search Player {i}: "))
@@ -113,11 +121,12 @@ def log_game():
             winner_val = 1 if is_winner else 0
             if is_winner: winners_count += 1
             
+            # Using 'i' as the turn order
             participants_data.append((p_id, d_id, winner_val, i))
 
-        # 3. Validation Logic (Allowing 0 or 1 winners)
+        # 3. Validation Logic
         if winners_count > 1:
-            print(f"\n!!! ERROR: Found {winners_count} winners. Only 1 (or 0 for draws) allowed.")
+            print(f"\n!!! ERROR: Found {winners_count} winners. Only 1 allowed.")
             return 
         if winners_count == 0:
             if input("0 winners entered. Was this a draw? (y/n): ").lower() != 'y':
@@ -132,10 +141,10 @@ def log_game():
             cursor.execute("INSERT INTO participants (player_id, game_id, deck_id, is_winner, turn_order) VALUES (?, ?, ?, ?, ?)", 
                            (p_id, game_id, d_id, win, turn))
         
-        conn.commit() # Ensure data is saved before querying it back
-        print("\nMatch successfully logged!")
+        conn.commit()
+        print(f"\nMatch successfully logged for {num_players} players!")
 
-        # 5. NEW: Display the logged game in Export format
+        # 5. Display Summary
         print("\n--- Summary of Logged Game ---")
         cursor.execute("""
             SELECT g.game_id, g.game_date, p.player_name, d.deck_name, part.is_winner, g.win_condition
