@@ -52,32 +52,48 @@ def run():
         game_data = display_df[display_df['game_number'] == g_num]
         meta = game_data.iloc[0]
         
-        # Header Box
-        st.markdown(f"""
+        # 1. Build the Header
+        header_html = f"""
             <div class="game-header">
                 <strong>Game #{g_num}</strong> — {meta['game_date']} | 
                 <span style="color: #aaa;">FB: T{meta['first_blood_turn']} | End: T{meta['end_turn']} | {meta['win_condition']}</span>
             </div>
-        """, unsafe_allow_html=True)
+        """
 
-        # Build Manual HTML Table for maximum compactness
-        table_html = "<table><thead><tr><th>Turn</th><th>Player</th><th>Deck</th><th>Result</th></tr></thead><tbody>"
-        
+        # 2. Build the Table Rows
+        rows_html = ""
         for _, row in game_data.iterrows():
             row_class = 'class="winner-row"' if row['is_winner'] == 1 else ""
             res_text = "🏆 Winner" if row['is_winner'] == 1 else "---"
             
-            table_html += f"""
+            rows_html += f"""
                 <tr {row_class}>
-                    <td>{row['turn_order']}</td>
-                    <td>{row['player_name']}</td>
-                    <td>{row['deck_name']}</td>
-                    <td>{res_text}</td>
+                    <td style="width: 10%;">{row['turn_order']}</td>
+                    <td style="width: 25%;">{row['player_name']}</td>
+                    <td style="width: 45%;">{row['deck_name']}</td>
+                    <td style="width: 20%;">{res_text}</td>
                 </tr>
             """
-        table_html += "</tbody></table>"
+
+        # 3. Combine and Render in ONE shot
+        full_html = f"""
+            {header_html}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Turn</th>
+                        <th>Player</th>
+                        <th>Deck</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows_html}
+                </tbody>
+            </table>
+        """
         
-        st.markdown(table_html, unsafe_allow_html=True)
+        st.markdown(full_html, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     run()
