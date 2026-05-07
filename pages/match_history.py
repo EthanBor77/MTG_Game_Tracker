@@ -53,7 +53,7 @@ def run():
         meta = game_data.iloc[0]
         
         # 1. Build the Header
-        header_html = f"""<div class="game-header"><strong>Game #{g_num}</strong> — {meta['game_date']} | <span style="color: #aaa;">First Blood: T{meta['first_blood_turn']} | End: T{meta['end_turn']} | Win Condition: {meta['win_condition']}</span></div>"""
+        header_html = f"""<div class="game-header"><strong>Game #{g_num}</strong> — {meta['game_date']} | <span style="color: #aaa;">First Blood: Turn {meta['first_blood_turn']} | End: T{meta['end_turn']} | Win Condition: {meta['win_condition']}</span></div>"""
 
         # 2. Build the Table Rows
         rows_html = ""
