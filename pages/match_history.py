@@ -28,7 +28,7 @@ def run():
             table { width: 100%; border-collapse: collapse; font-size: 13px; }
             th { text-align: left; border-bottom: 1px solid #444; color: #888; }
             td { padding: 4px 8px; border-bottom: 1px dotted #333; }
-            .winner-row { background-color: rgba(255, 215, 0, 0.15); font-weight: bold; }
+            .winner-row { background-color: rgba(40, 167, 69, 0.2); font-weight: bold; }
             hr { margin: 1em 0 !important; }
         </style>
     """, unsafe_allow_html=True)
@@ -53,7 +53,7 @@ def run():
         meta = game_data.iloc[0]
         
         # 1. Build the Header
-        header_html = f"""<div class="game-header"><strong>Game #{g_num}</strong> — {meta['game_date']} | <span style="color: #aaa;">FB: T{meta['first_blood_turn']} | End: T{meta['end_turn']} | {meta['win_condition']}</span></div>"""
+        header_html = f"""<div class="game-header"><strong>Game #{g_num}</strong> — {meta['game_date']} | <span style="color: #aaa;">First Blood: T{meta['first_blood_turn']} | End: T{meta['end_turn']} | Win Condition: {meta['win_condition']}</span></div>"""
 
         # 2. Build the Table Rows
         rows_html = ""
