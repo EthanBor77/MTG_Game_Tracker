@@ -2,6 +2,10 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 
+import streamlit as st
+import sqlite3
+import pandas as pd
+
 def get_match_history():
     conn = sqlite3.connect("mtg_stats.db")
     query = """
@@ -18,26 +22,20 @@ def get_match_history():
     return df
 
 def highlight_winner(row):
-    """
-    Returns a list of CSS strings to apply to the row.
-    Golden-yellow background for the winner, no style for others.
-    """
     if row['Result'] == "🏆 Winner":
-        return ['background-color: rgba(255, 215, 0, 0.3); font-weight: bold'] * len(row)
+        return ['background-color: rgba(255, 215, 0, 0.2); font-weight: bold'] * len(row)
     return [''] * len(row)
 
 def run():
     st.title("📜 Complete Match History")
-    st.markdown("Detailed breakdown of every pod logged in the Auburn Hills Meta.")
-
+    
     df = get_match_history()
-
     if df.empty:
         st.warning("No games found.")
         return
 
-    # --- Sidebar Filtering ---
-    st.sidebar.header("Filter History")
+    # Sidebar Filter (Kept this because it's handy for 140+ games)
+    st.sidebar.header("Search")
     search_player = st.sidebar.text_input("Filter by Player Name")
     
     if search_player:
@@ -46,38 +44,36 @@ def run():
     else:
         display_df = df
 
-    # --- Match Display Loop ---
     unique_games = display_df['game_number'].unique()
 
+    # --- THE FLAT LAYOUT ---
     for g_num in unique_games:
         game_data = display_df[display_df['game_number'] == g_num]
         meta = game_data.iloc[0]
         
-        # Identify the winner for the header label
+        # Determine Winner Name for the header
         winner_row = game_data[game_data['is_winner'] == 1]
-        winner_name = winner_row['player_name'].iloc[0] if not winner_row.empty else "Draw/No Winner"
+        winner_name = winner_row['player_name'].iloc[0] if not winner_row.empty else "Draw"
+
+        # Game Header - No expander, just a bold sub-header
+        st.subheader(f"Game #{g_num} — {meta['game_date']}")
         
-        header_label = f"Game #{g_num} | {meta['game_date']} | Winner: {winner_name}"
+        # Meta info in a single line to save vertical space
+        st.markdown(f"**Winner:** {winner_name} | **FB Turn:** {meta['first_blood_turn']} | **End Turn:** {meta['end_turn']} | **Win Con:** {meta['win_condition']}")
+
+        # Table Prep
+        table_data = game_data[['turn_order', 'player_name', 'deck_name', 'is_winner']].copy()
+        table_data['is_winner'] = table_data['is_winner'].apply(lambda x: "🏆 Winner" if x == 1 else "---")
+        table_data.columns = ['Turn', 'Player', 'Deck', 'Result']
+
+        # Apply Styling
+        styled_table = table_data.style.apply(highlight_winner, axis=1)
+
+        # Display full table (no scrolling/hiding)
+        st.table(styled_table)
         
-        with st.expander(header_label):
-            # Layout for game-wide stats
-            m1, m2, m3 = st.columns(3)
-            m1.metric("End Turn", f"T{meta['end_turn']}")
-            m2.metric("First Blood", f"T{meta['first_blood_turn']}")
-            m3.write(f"**Win Condition:**\n{meta['win_condition']}")
-            
-            st.divider()
-
-            # Prepare the table for styling
-            table_data = game_data[['turn_order', 'player_name', 'deck_name', 'is_winner']].copy()
-            table_data['is_winner'] = table_data['is_winner'].apply(lambda x: "🏆 Winner" if x == 1 else "---")
-            table_data.columns = ['Turn Order', 'Player', 'Deck', 'Result']
-
-            # Apply the highlight logic via Pandas Styler
-            styled_table = table_data.style.apply(highlight_winner, axis=1)
-
-            # Display the styled table
-            st.table(styled_table)
+        # Strong visual break between matches
+        st.markdown("---")
 
 if __name__ == "__main__":
     run()
