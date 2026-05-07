@@ -26,6 +26,12 @@ player_page = st.Page(
     icon="📈"
 )
 
+match_history_page = st.Page(
+    "pages/match_history.py",
+    title="Match History",
+    icon="📜"
+)
+
 fun_stats_page = st.Page(
     "pages/fun_stats.py",
     title="Fun Stats",
@@ -33,7 +39,7 @@ fun_stats_page = st.Page(
 )
 
 # 2. Create the navigation structure
-pg = st.navigation([home_page, deck_page, seating_page, player_page])
+pg = st.navigation([home_page, deck_page, seating_page, player_page, match_history_page, fun_stats_page])
 
 # 3. Run the navigation
 pg.run()
