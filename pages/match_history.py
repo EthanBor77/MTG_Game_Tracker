@@ -78,3 +78,6 @@ def run():
 
             # Display the styled table
             st.table(styled_table)
+
+if __name__ == "__main__":
+    run()
