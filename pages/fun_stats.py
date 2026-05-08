@@ -68,6 +68,7 @@ def run():
             color_discrete_sequence=px.colors.qualitative.Pastel
         )
         fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
+        fig.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("Log more games to see win condition distributions!")
