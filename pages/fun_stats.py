@@ -8,7 +8,7 @@ def get_connection():
 
 def run():
     st.title("🎉 Fun Stats")
-    st.markdown("Deep dives into the records of the Auburn Hills playgroup.")
+    # st.markdown("Deep dives into the records of the Auburn Hills playgroup.")
 
     with get_connection() as conn:
         # 1. Fetch Extreme Games (Longest/Shortest)
