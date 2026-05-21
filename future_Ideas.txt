@@ -1,0 +1,4 @@
+Future Ideas / Additions for this project
+
+1: Color tracking and Analysis
+2: Winrate over the past 
