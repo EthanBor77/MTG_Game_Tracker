@@ -78,7 +78,7 @@ def run():
 
         c1, c2 = st.columns([2, 1])
         with c1:
-            # 1. Our core MTG palette
+            # 1. Map our core clean MTG hex codes
             master_colors = {
                 "White ☀️": "#F8E7B9", 
                 "Blue 💧": "#B3CEE5", 
@@ -88,17 +88,16 @@ def run():
                 "Colorless 💎": "#D3D3D3"
             }
             
-            # 2. Build the map dynamically. 
-            # If a color from the DB isn't in master_colors, default it to gray (#888888)
-            active_colors = {}
-            for c in color_summary['color'].unique():
-                active_colors[c] = master_colors.get(c, "#888888")
+            # 2. Build an explicitly ordered list of hex codes matching the rows in our dataframe
+            color_sequence = [master_colors.get(c, "#888888") for c in color_summary['color']]
 
-            # 3. Create the bar chart
+            # 3. Create the bar chart using color_discrete_sequence instead of color mapping
             fig_group_indiv = px.bar(
-                color_summary, x='color', y='Games_Played', color='color',
+                color_summary, 
+                x='color', 
+                y='Games_Played',
                 title="How Often Each Color is Played (All Decks)",
-                color_discrete_map=active_colors
+                color_discrete_sequence=color_sequence # Forces exact color matches seamlessly
             )
             fig_group_indiv.update_layout(template="plotly_dark", showlegend=False)
             st.plotly_chart(fig_group_indiv, use_container_width=True)
@@ -151,17 +150,16 @@ def run():
         p_col1, p_col2 = st.columns([1, 1])
         
         with p_col1:
-            # Build the player's active colors with a safe fallback
-            player_active_colors = {}
-            for c in player_color_sum['color'].unique():
-                player_active_colors[c] = master_colors.get(c, "#888888")
+            # Build an explicit color sequence matching the player's unique row layout
+            player_color_sequence = [master_colors.get(c, "#888888") for c in player_color_sum['color']]
 
             fig_player_pie = px.pie(
-                player_color_sum, values='Games_Played', names='color',
+                player_color_sum, 
+                values='Games_Played', 
+                names='color',
                 title=f"{selected_player}'s Color Distribution",
                 hole=0.4,
-                color='color',
-                color_discrete_map=player_active_colors
+                color_discrete_sequence=player_color_sequence # Total immunity from Pandas KeyError drops
             )
             fig_player_pie.update_layout(template="plotly_dark")
             st.plotly_chart(fig_player_pie, use_container_width=True)
