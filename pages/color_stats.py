@@ -77,13 +77,20 @@ def run():
 
         c1, c2 = st.columns([2, 1])
         with c1:
+            # 1. Define the master palette
+            master_colors = {
+                "White ☀️": "#F8E7B9", "Blue 💧": "#B3CEE5", "Black 💀": "#A69995",
+                "Red 🔥": "#E4B3A6", "Green 🌳": "#A4C7A6", "Colorless 💎": "#D3D3D3"
+            }
+            
+            # 2. Filter the map dynamically so it only includes colors present in color_summary
+            active_colors = {c: master_colors[c] for c in color_summary['color'] if c in master_colors}
+
+            # 3. Create the bar chart safely
             fig_group_indiv = px.bar(
                 color_summary, x='color', y='Games_Played', color='color',
                 title="How Often Each Color is Played (All Decks)",
-                color_discrete_map={
-                    "White ☀️": "#F8E7B9", "Blue 💧": "#B3CEE5", "Black 💀": "#A69995",
-                    "Red 🔥": "#E4B3A6", "Green 🌳": "#A4C7A6", "Colorless 💎": "#D3D3D3"
-                }
+                color_discrete_map=active_colors  # Use the safe, filtered map
             )
             fig_group_indiv.update_layout(template="plotly_dark", showlegend=False)
             st.plotly_chart(fig_group_indiv, use_container_width=True)
@@ -135,15 +142,15 @@ def run():
         p_col1, p_col2 = st.columns([1, 1])
         
         with p_col1:
+            # Filter the map dynamically for the individual player's summary
+            player_active_colors = {c: master_colors[c] for c in player_color_sum['color'] if c in master_colors}
+
             fig_player_pie = px.pie(
                 player_color_sum, values='Games_Played', names='color',
                 title=f"{selected_player}'s Color Distribution",
                 hole=0.4,
                 color='color',
-                color_discrete_map={
-                    "White ☀️": "#F8E7B9", "Blue 💧": "#B3CEE5", "Black 💀": "#A69995",
-                    "Red 🔥": "#E4B3A6", "Green 🌳": "#A4C7A6", "Colorless 💎": "#D3D3D3"
-                }
+                color_discrete_map=player_active_colors  # Use the safe, filtered map
             )
             fig_player_pie.update_layout(template="plotly_dark")
             st.plotly_chart(fig_player_pie, use_container_width=True)
