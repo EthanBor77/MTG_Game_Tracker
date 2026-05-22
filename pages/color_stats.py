@@ -73,6 +73,7 @@ def run():
             Games_Played=('games_played', 'sum'),
             Wins=('is_winner', 'sum')
         ).reset_index()
+        color_summary = color_summary.reset_index(drop=True)
         color_summary['Win Rate (%)'] = round((color_summary['Wins'] / color_summary['Games_Played']) * 100, 1)
 
         c1, c2 = st.columns([2, 1])
@@ -144,6 +145,7 @@ def run():
             Games_Played=('games_played', 'sum'),
             Wins=('is_winner', 'sum')
         ).reset_index()
+        player_color_sum = player_color_sum.reset_index(drop=True)
         player_color_sum['Win Rate (%)'] = round((player_color_sum['Wins'] / player_color_sum['Games_Played']) * 100, 1)
 
         p_col1, p_col2 = st.columns([1, 1])
