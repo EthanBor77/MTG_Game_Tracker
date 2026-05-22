@@ -49,16 +49,32 @@ def add_player():
             print("Error: That player already exists.")
 
 def add_deck():
-    """Links a new deck name to an existing player ID."""
+    """Links a new deck name and color identity to an existing player ID."""
     owner_search = input("\nSearch for the Owner's name: ")
     p_id = find_item("players", "player_name", owner_search)
     
     if p_id:
         deck_name = input("Enter Deck Name: ").strip()
+        
+        # Capture raw color string (e.g., "rg" or "gru")
+        raw_colors = input("Enter Deck Colors (WUBRG combo, e.g., 'GUB'): ").strip()
+        # Clean and enforce WUBRG order
+        clean_colors = format_wubrg(raw_colors)
+        
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO decks (deck_name, player_id) VALUES (?, ?)", (deck_name, p_id))
-            print(f"Deck '{deck_name}' registered.")
+            cursor.execute("""
+                INSERT INTO decks (deck_name, player_id, deck_colors) 
+                VALUES (?, ?, ?)
+            """, (deck_name, p_id, clean_colors))
+            print(f"Deck '{deck_name}' [{clean_colors}] registered successfully.")
+
+def format_wubrg(color_string):
+    """Sorts a string of colors into strict WUBRG order."""
+    wubrg_order = {char: index for index, char in enumerate("WUBRG")}
+    # Sort based on the character's position in WUBRG string
+    sorted_colors = sorted(color_string.upper(), key=lambda char: wubrg_order.get(char, 99))
+    return "".join(sorted_colors)
 
 def rename_deck():
     """Finds an existing deck and updates its name string."""

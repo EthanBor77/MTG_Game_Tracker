@@ -3,8 +3,7 @@ import pandas as pd
 import sqlite3
 
 # Standardize page config
-st.set_page_config(page_title="MTG Stats - Home", layout="wide")
-
+st.set_page_config(page_title="MTG Stats - Leaderboard", layout="wide")
 st.title("🏆 MTG Playgroup Leaderboard")
 
 def get_data():

@@ -3,12 +3,13 @@ import sqlite3
 import pandas as pd
 import plotly.express as px
 
+st.set_page_config(page_title="MTG Stats - Fun Stats", layout="wide")
+st.title("🎉 Fun Stats")
+
 def get_connection():
     return sqlite3.connect("mtg_stats.db")
 
 def run():
-    st.title("🎉 Fun Stats")
-    # st.markdown("Deep dives into the records of the Auburn Hills playgroup.")
 
     with get_connection() as conn:
         # 1. Fetch Extreme Games (Longest/Shortest)

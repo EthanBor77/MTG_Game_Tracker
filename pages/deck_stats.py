@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 
-st.set_page_config(page_title="Deck Stats", layout="wide")
+st.set_page_config(page_title="MTG Stats - Decks", layout="wide")
 st.title("🎴 Individual Deck Performance")
 
 def get_deck_data(player_name):

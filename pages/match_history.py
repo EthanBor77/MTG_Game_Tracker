@@ -2,6 +2,9 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 
+st.set_page_config(page_title="MTG Stats - Match History", layout="wide")
+st.title("📜 Complete Match History")
+
 def get_match_history():
     conn = sqlite3.connect("mtg_stats.db")
     query = """
@@ -18,7 +21,6 @@ def get_match_history():
     return df
 
 def run():
-    st.title("📜 Complete Match History")
     
     # Custom CSS to shrink the padding and font size globally for this page
     st.markdown("""

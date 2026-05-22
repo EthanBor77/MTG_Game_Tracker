@@ -2,8 +2,7 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 
-st.set_page_config(page_title="Seating & Game Stats", layout="wide")
-
+st.set_page_config(page_title="MTG Stats - Pod Analytics", layout="wide")
 st.title("📊 Pod Analytics")
 
 def get_connection():

@@ -37,8 +37,14 @@ fun_stats_page = st.Page(
     icon="🎉"
 )
 
+color_stats_page = st.Page(
+    "pages/color_stats.py",
+    title="Color Statistics",
+    icon="🎨"
+)
+
 # 2. Create the navigation structure
-pg = st.navigation([home_page, deck_page, seating_page, player_page, match_history_page, fun_stats_page])
+pg = st.navigation([home_page, deck_page, seating_page, player_page, match_history_page, fun_stats_page, color_stats_page])
 
 # 3. Run the navigation
 pg.run()

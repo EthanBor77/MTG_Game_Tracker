@@ -1,4 +1,21 @@
 Future Ideas / Additions for this project
 
 1: Color tracking and Analysis
+    - how much does the group play certain colors and pairs
+    - how much does an individual play certain colors
+    - group and individual winrates for colors and pairs
 2: Winrate over the past 
+3: extra game notes
+4: infinite combo tracker
+5: do winrates go up or down as a deck is played
+
+1: Color tracking and Analysis
+add to decks
+    - deck_color this can be a string containing any combination of wubrg without repeats
+    w: white
+    u: blue
+    b: black
+    r: red
+    g: green
+    
+read each deck_color and count how many w's are in the strings

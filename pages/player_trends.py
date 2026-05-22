@@ -3,7 +3,7 @@ import pandas as pd
 import sqlite3
 import altair as alt
 
-st.set_page_config(page_title="Player Trends", layout="wide")
+st.set_page_config(page_title="MTG Stats - Player Trends", layout="wide")
 st.title("📈 Win Rate Over Time")
 
 def get_connection():
