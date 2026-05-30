@@ -8,6 +8,7 @@ Future Ideas / Additions for this project
 3: extra game notes
 4: infinite combo tracker
 5: do winrates go up or down as a deck is played
+6: for aech deck give a number on individual deck performance table and colors
 
 1: Color tracking and Analysis
 add to decks
