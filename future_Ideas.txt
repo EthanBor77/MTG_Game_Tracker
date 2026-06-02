@@ -9,6 +9,8 @@ Future Ideas / Additions for this project
 4: infinite combo tracker
 5: do winrates go up or down as a deck is played
 6: for aech deck give a number on individual deck performance table and colors
+7: display number of decks per player
+8: display what day the games were last inputted
 
 1: Color tracking and Analysis
 add to decks
