@@ -61,15 +61,26 @@ def process_combinations(df):
 
 def run():
     st.title("🎨 Color Statistics & Meta Analysis")
+    st.markdown("Discover the dominant forces and hidden trends of the Auburn Hills playgroup.")
 
     raw_df = load_color_data()
     if raw_df.empty:
         st.warning("No game data found. Go log some matches first!")
         return
 
+    # Process dataframes for downstream analytics
     indiv_df = process_individual_colors(raw_df)
     combo_df = process_combinations(raw_df)
 
+    # --- THE FOOLPROOF DATABASE CLEANSE ---
+    # If the database returns strings with emojis, strip them down to clean text strings
+    for df in [indiv_df, combo_df]:
+        if 'color' in df.columns:
+            df['color'] = df['color'].astype(str).str.replace(" ☀️", "").str.replace(" 💧", "").str.replace(" 💀", "").str.replace(" 🔥", "").str.replace(" 🌳", "").str.replace(" 💎", "")
+        if 'deck_colors' in df.columns:
+            df['deck_colors'] = df['deck_colors'].astype(str).str.replace(" ☀️", "").str.replace(" 💧", "").str.replace(" 💀", "").str.replace(" 🔥", "").str.replace(" 🌳", "").str.replace(" 💎", "")
+
+    # Use tabs to keep the UI organized
     tab1, tab2 = st.tabs(["👥 Group Analytics", "👤 Player Analytics"])
 
     # ==========================================
@@ -78,32 +89,30 @@ def run():
     with tab1:
         st.header("Meta-Wide Color Presence")
         
+        # 1. Individual Color Frequency & Win Rate
         color_summary = indiv_df.groupby('color').agg(
             Games_Played=('games_played', 'sum'),
             Wins=('is_winner', 'sum')
         ).reset_index()
         
-        # Precise Sorting
+        # Safe sorting map matching our global WUBRG text strings
         sort_map = {color_name: i for i, color_name in enumerate(WUBRG_ORDER)}
-        color_summary['sort_idx'] = color_summary['color'].map(sort_map)
+        color_summary['sort_idx'] = color_summary['color'].map(sort_map).fillna(99)
         color_summary = color_summary.sort_values('sort_idx').reset_index(drop=True)
         
         color_summary['Win Rate (%)'] = round((color_summary['Wins'] / color_summary['Games_Played']) * 100, 1)
 
         c1, c2 = st.columns([2, 1])
         with c1:
-            # Instead of a map, we pass a list of colors in the exact order of our rows
+            # Build colors explicitly tied to the exact rows present
             bar_colors = [master_colors.get(c, "#888888") for c in color_summary['color']]
 
             fig_group_indiv = px.bar(
                 color_summary, 
                 x='color', 
                 y='Games_Played',
-                # REMOVED color='color' to prevent the internal Plotly groupby error
-                title="How Often Each Color is Played (All Decks)",
+                title="How Often Each Color is Played (All Decks)"
             )
-            
-            # Manually apply the colors to the markers
             fig_group_indiv.update_traces(marker_color=bar_colors)
             fig_group_indiv.update_layout(template="plotly_dark", xaxis_title="Color")
             st.plotly_chart(fig_group_indiv, use_container_width=True)
@@ -117,7 +126,7 @@ def run():
 
         st.divider()
         
-        # Combination Breakdown (Treemap remains the same as it handles colors differently)
+        # 2. Exact Identity/Combination Breakdown
         st.header("Deck Archetype & Combination Breakdown")
         combo_summary = combo_df.groupby('deck_colors').agg(
             Games_Played=('game_id', 'count'),
@@ -141,6 +150,7 @@ def run():
         
         selected_player = st.selectbox("Select a Player", raw_df['player_name'].unique())
         
+        # Filter global datasets to just the target player
         player_indiv = indiv_df[indiv_df['player_name'] == selected_player]
         player_combo = combo_df[combo_df['player_name'] == selected_player]
 
@@ -149,7 +159,7 @@ def run():
             Wins=('is_winner', 'sum')
         ).reset_index()
         
-        player_color_sum['sort_idx'] = player_color_sum['color'].map(sort_map)
+        player_color_sum['sort_idx'] = player_color_sum['color'].map(sort_map).fillna(99)
         player_color_sum = player_color_sum.sort_values('sort_idx').reset_index(drop=True)
         
         player_color_sum['Win Rate (%)'] = round((player_color_sum['Wins'] / player_color_sum['Games_Played']) * 100, 1)
@@ -157,7 +167,6 @@ def run():
         p_col1, p_col2 = st.columns([1, 1])
         
         with p_col1:
-            # Using the discrete sequence for the pie chart as well
             pie_colors = [master_colors.get(c, "#888888") for c in player_color_sum['color']]
 
             fig_player_pie = px.pie(
@@ -166,7 +175,7 @@ def run():
                 names='color',
                 title=f"{selected_player}'s Color Distribution",
                 hole=0.4,
-                color_discrete_sequence=pie_colors # Force the colors in order
+                color_discrete_sequence=pie_colors
             )
             fig_player_pie.update_layout(template="plotly_dark")
             st.plotly_chart(fig_player_pie, use_container_width=True)
@@ -177,9 +186,27 @@ def run():
                 player_color_sum[['color', 'Games_Played', 'Win Rate (%)']],
                 hide_index=True, use_container_width=True
             )
-        
+
         st.divider()
-        # ... (rest of the table logic remains the same)
+        
+        # Player Exact Combinations
+        st.subheader(f"{selected_player}'s Specific Decks Played")
+        p_combo_sum = player_combo.groupby('deck_colors').agg(
+            Games_Played=('game_id', 'count'),
+            Wins=('is_winner', 'sum')
+        ).reset_index()
+        p_combo_sum['Win Rate (%)'] = round((p_combo_sum['Wins'] / p_combo_sum['Games_Played']) * 100, 1)
+        
+        st.dataframe(
+            p_combo_sum.sort_values(by='Games_Played', ascending=False),
+            column_config={
+                "deck_colors": "Color Combination",
+                "Games_Played": "Games Logged",
+                "Wins": "Total Wins",
+                "Win Rate (%)": st.column_config.ProgressColumn("Win Rate", format="%d%%", min_value=0, max_value=100)
+            },
+            hide_index=True, use_container_width=True
+        )
 
 if __name__ == "__main__":
     run()
