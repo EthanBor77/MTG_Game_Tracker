@@ -62,7 +62,7 @@ def process_combinations(df):
 
 def run():
     st.title("🎨 Color Statistics & Meta Analysis")
-    st.markdown("Discover the dominant forces and hidden trends of the Auburn Hills playgroup.")
+    #st.markdown("Discover the dominant forces and hidden trends of the Auburn Hills playgroup.")
 
     raw_df = load_color_data()
     if raw_df.empty:

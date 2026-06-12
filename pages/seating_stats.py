@@ -113,20 +113,20 @@ try:
 
 
     # --- META INSIGHTS (The No-Graph Replacement) ---
-    st.subheader("⏱️ Game Pace Analysis")
+    # st.subheader("⏱️ Game Pace Analysis")
     
-    col_a, col_b = st.columns(2)
+    # col_a, col_b = st.columns(2)
     
-    with col_a:
-        st.markdown(f"**Lethality Level:** Most games see their first elimination by **Turn {avg_f:.1f}**.")
-        st.markdown(f"**Closing Speed:** Once the first player is out, the game typically wraps up in **{avg_gap:.1f} turns**.")
+    # with col_a:
+    #     st.markdown(f"**Lethality Level:** Most games see their first elimination by **Turn {avg_f:.1f}**.")
+    #     st.markdown(f"**Closing Speed:** Once the first player is out, the game typically wraps up in **{avg_gap:.1f} turns**.")
         
-    with col_b:
-        # Fun logic-based insight
-        if avg_gap > 4:
-            st.warning("⚠️ **High Survival Gap:** We might be 'durdling' after the first kill. Consider more win-cons or more decisive plays!")
-        else:
-            st.success("✅ **Efficient Finishing:** We're doing great at closing games once the first person falls. (I'm Proud of You!)")
+    # with col_b:
+    #     # Fun logic-based insight
+    #     if avg_gap > 4:
+    #         st.warning("⚠️ **High Survival Gap:** We might be 'durdling' after the first kill. Consider more win-cons or more decisive plays!")
+    #     else:
+    #         st.success("✅ **Efficient Finishing:** We're doing great at closing games once the first person falls. (I'm Proud of You!)")
 
 except Exception as e:
     st.error(f"Error generating seating stats: {e}")
