@@ -168,6 +168,7 @@ def run():
             Wins=('is_winner', 'sum')
         ).reset_index()
         
+        # Keep our safe tracking numerical sort
         player_color_sum['sort_idx'] = player_color_sum['color'].map(sort_map).fillna(99)
         player_color_sum = player_color_sum.sort_values('sort_idx').reset_index(drop=True)
         player_color_sum['Win Rate (%)'] = round((player_color_sum['Wins'] / player_color_sum['Games_Played']) * 100, 1)
@@ -175,15 +176,15 @@ def run():
         p_col1, p_col2 = st.columns([1, 1])
         
         with p_col1:
-            pie_colors = [master_colors.get(c, "#888888") for c in player_color_sum['color']]
-
+            # FIXED: We now map the keys directly to the values using your px sample logic!
             fig_player_pie = px.pie(
                 player_color_sum, 
                 values='Games_Played', 
                 names='color',
+                color='color',               # Assign colors dynamically based on the label values
                 title=f"{selected_player}'s Color Distribution",
                 hole=0.4,
-                color_discrete_sequence=pie_colors
+                color_discrete_map=master_colors  # Hard locks labels to specific hex values
             )
             fig_player_pie.update_layout(template="plotly_dark")
             st.plotly_chart(fig_player_pie, use_container_width=True)
