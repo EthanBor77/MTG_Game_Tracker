@@ -6,12 +6,12 @@ import plotly.graph_objects as go  # Added for absolute chart stability
 
 # Global clean MTG hex codes mapping (No emojis)
 master_colors = {
-    "White": "#F8E7B9", 
-    "Blue": "#B3CEE5", 
-    "Black": "#A69995",
-    "Red": "#E4B3A6", 
-    "Green": "#A4C7A6", 
-    "Colorless": "#D3D3D3"
+    "White": "#F7F2D8", 
+    "Blue": "#1D79C3", 
+    "Black": "#2F2F31",
+    "Red": "#D33E36", 
+    "Green": "#3E8D5D", 
+    "Colorless": "#9FA4A9"
 }
 
 # Define the canonical Magic color hierarchy
