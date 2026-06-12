@@ -95,16 +95,14 @@ def run():
 
         c1, c2 = st.columns([2, 1])
         with c1:
-            # Build an explicitly ordered list of hex codes matching our sorted rows
-            color_sequence = [master_colors.get(c, "#888888") for c in color_summary['color']]
-
-            # Create the bar chart
+            # Create the multi-colored bar chart using explicit mapping
             fig_group_indiv = px.bar(
                 color_summary, 
                 x='color', 
                 y='Games_Played',
+                color='color',  # Tell Plotly each bar gets its own color category
                 title="How Often Each Color is Played (All Decks)",
-                color_discrete_sequence=color_sequence
+                color_discrete_map=master_colors  # Force individual color coding matching master palette
             )
             fig_group_indiv.update_layout(template="plotly_dark", showlegend=False, xaxis_title="Color")
             st.plotly_chart(fig_group_indiv, use_container_width=True)
@@ -151,7 +149,7 @@ def run():
             Wins=('is_winner', 'sum')
         ).reset_index()
         
-        # Enforce WUBRG sorting here too so pie chart segments maintain consistency
+        # Enforce WUBRG sorting here too
         player_color_sum['color'] = pd.Categorical(player_color_sum['color'], categories=WUBRG_ORDER, ordered=True)
         player_color_sum = player_color_sum.sort_values('color').reset_index(drop=True)
         
@@ -160,16 +158,15 @@ def run():
         p_col1, p_col2 = st.columns([1, 1])
         
         with p_col1:
-            # Build color sequence matching the user's filtered color dataset layout
-            player_color_sequence = [master_colors.get(c, "#888888") for c in player_color_sum['color']]
-
+            # Bulletproof donut color lock using strict mapping properties
             fig_player_pie = px.pie(
                 player_color_sum, 
                 values='Games_Played', 
                 names='color',
+                color='color',  # Ties the segment names directly to the color keys
                 title=f"{selected_player}'s Color Distribution",
                 hole=0.4,
-                color_discrete_sequence=player_color_sequence
+                color_discrete_map=master_colors  # Hard locks colors regardless of missing values
             )
             fig_player_pie.update_layout(template="plotly_dark")
             st.plotly_chart(fig_player_pie, use_container_width=True)
