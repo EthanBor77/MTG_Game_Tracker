@@ -3,6 +3,19 @@ import sqlite3
 import pandas as pd
 import plotly.express as px
 
+# Global clean MTG hex codes mapping (No emojis)
+master_colors = {
+    "White": "#F7F2D8", 
+    "Blue": "#1D79C3", 
+    "Black": "#2F2F31",
+    "Red": "#D33E36", 
+    "Green": "#3E8D5D", 
+    "Colorless": "#9FA4A9"
+}
+
+# Define the canonical Magic color hierarchy
+WUBRG_ORDER = ["White", "Blue", "Black", "Red", "Green", "Colorless"]
+
 def get_connection():
     return sqlite3.connect("mtg_stats.db")
 
@@ -22,13 +35,13 @@ def load_color_data():
 def process_individual_colors(df):
     """Explodes the WUBRG strings into individual rows to calculate solo color stats."""
     records = []
-    color_map = {"W": "White ☀️", "U": "Blue 💧", "B": "Black 💀", "R": "Red 🔥", "G": "Green 🌳"}
+    color_map = {"W": "White", "U": "Blue", "B": "Black", "R": "Red", "G": "Green"}
     
     for _, row in df.iterrows():
         colors = row['deck_colors'] if row['deck_colors'] else 'C' # 'C' for Colorless
         if colors == 'C':
             records.append({
-                'player_name': row['player_name'], 'color': 'Colorless 💎', 
+                'player_name': row['player_name'], 'color': 'Colorless', 
                 'is_winner': row['is_winner'], 'games_played': 1
             })
         else:
@@ -43,7 +56,7 @@ def process_individual_colors(df):
 def process_combinations(df):
     """Cleans up raw combinations for layout display (e.g., converts empty string to Colorless)."""
     df_combos = df.copy()
-    df_combos['deck_colors'] = df_combos['deck_colors'].apply(lambda x: x if x != "" else "Colorless 💎")
+    df_combos['deck_colors'] = df_combos['deck_colors'].apply(lambda x: x if x != "" else "Colorless")
     return df_combos
 
 def run():
@@ -73,40 +86,33 @@ def run():
             Games_Played=('games_played', 'sum'),
             Wins=('is_winner', 'sum')
         ).reset_index()
-        color_summary = color_summary.reset_index(drop=True)
+        
+        # Enforce WUBRG Sorting Rule
+        color_summary['color'] = pd.Categorical(color_summary['color'], categories=WUBRG_ORDER, ordered=True)
+        color_summary = color_summary.sort_values('color').reset_index(drop=True)
+        
         color_summary['Win Rate (%)'] = round((color_summary['Wins'] / color_summary['Games_Played']) * 100, 1)
 
         c1, c2 = st.columns([2, 1])
         with c1:
-            # 1. Map our core clean MTG hex codes
-            master_colors = {
-                "White ☀️": "#F8E7B9", 
-                "Blue 💧": "#B3CEE5", 
-                "Black 💀": "#A69995",
-                "Red 🔥": "#E4B3A6", 
-                "Green 🌳": "#A4C7A6", 
-                "Colorless 💎": "#D3D3D3"
-            }
-            
-            # 2. Build an explicitly ordered list of hex codes matching the rows in our dataframe
+            # Build an explicitly ordered list of hex codes matching our sorted rows
             color_sequence = [master_colors.get(c, "#888888") for c in color_summary['color']]
 
-            # 3. Create the bar chart using color_discrete_sequence instead of color mapping
+            # Create the bar chart
             fig_group_indiv = px.bar(
                 color_summary, 
                 x='color', 
                 y='Games_Played',
                 title="How Often Each Color is Played (All Decks)",
-                color_discrete_sequence=color_sequence # Forces exact color matches seamlessly
+                color_discrete_sequence=color_sequence
             )
-            fig_group_indiv.update_layout(template="plotly_dark", showlegend=False)
+            fig_group_indiv.update_layout(template="plotly_dark", showlegend=False, xaxis_title="Color")
             st.plotly_chart(fig_group_indiv, use_container_width=True)
             
         with c2:
             st.write("### Color Win Rates")
-            # Minimal styling for a compact table layout
             st.dataframe(
-                color_summary[['color', 'Games_Played', 'Win Rate (%)']].sort_values(by='Win Rate (%)', ascending=False),
+                color_summary[['color', 'Games_Played', 'Win Rate (%)']],
                 hide_index=True, use_container_width=True
             )
 
@@ -144,13 +150,17 @@ def run():
             Games_Played=('games_played', 'sum'),
             Wins=('is_winner', 'sum')
         ).reset_index()
-        player_color_sum = player_color_sum.reset_index(drop=True)
+        
+        # Enforce WUBRG sorting here too so pie chart segments maintain consistency
+        player_color_sum['color'] = pd.Categorical(player_color_sum['color'], categories=WUBRG_ORDER, ordered=True)
+        player_color_sum = player_color_sum.sort_values('color').reset_index(drop=True)
+        
         player_color_sum['Win Rate (%)'] = round((player_color_sum['Wins'] / player_color_sum['Games_Played']) * 100, 1)
 
         p_col1, p_col2 = st.columns([1, 1])
         
         with p_col1:
-            # Build an explicit color sequence matching the player's unique row layout
+            # Build color sequence matching the user's filtered color dataset layout
             player_color_sequence = [master_colors.get(c, "#888888") for c in player_color_sum['color']]
 
             fig_player_pie = px.pie(
@@ -159,7 +169,7 @@ def run():
                 names='color',
                 title=f"{selected_player}'s Color Distribution",
                 hole=0.4,
-                color_discrete_sequence=player_color_sequence # Total immunity from Pandas KeyError drops
+                color_discrete_sequence=player_color_sequence
             )
             fig_player_pie.update_layout(template="plotly_dark")
             st.plotly_chart(fig_player_pie, use_container_width=True)
@@ -167,7 +177,7 @@ def run():
         with p_col2:
             st.write(f"### {selected_player}'s Performance by Color")
             st.dataframe(
-                player_color_sum[['color', 'Games_Played', 'Win Rate (%)']].sort_values(by='Win Rate (%)', ascending=False),
+                player_color_sum[['color', 'Games_Played', 'Win Rate (%)']],
                 hide_index=True, use_container_width=True
             )
 
