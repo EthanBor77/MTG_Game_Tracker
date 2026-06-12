@@ -87,22 +87,30 @@ def run():
             Wins=('is_winner', 'sum')
         ).reset_index()
         
-        # Enforce WUBRG Sorting Rule
-        color_summary['color'] = pd.Categorical(color_summary['color'], categories=WUBRG_ORDER, ordered=True)
-        color_summary = color_summary.sort_values('color').reset_index(drop=True)
+        # --- SAFE WUBRG SORTING WITHOUT CATEGORICAL TYPES ---
+        # Map our sorting hierarchy to positions
+        sort_map = {color_name: i for i, color_name in enumerate(WUBRG_ORDER)}
+        # Create a temporary numerical column to sort by, then drop it
+        color_summary['sort_idx'] = color_summary['color'].map(sort_map)
+        color_summary = color_summary.sort_values('sort_idx').drop(columns=['sort_idx']).reset_index(drop=True)
+        # Ensure the column remains a standard string type to keep Plotly happy
+        color_summary['color'] = color_summary['color'].astype(str)
         
         color_summary['Win Rate (%)'] = round((color_summary['Wins'] / color_summary['Games_Played']) * 100, 1)
 
         c1, c2 = st.columns([2, 1])
         with c1:
-            # Create the multi-colored bar chart using explicit mapping
+            # Build a dynamic palette map containing ONLY the colors currently in this slice of data
+            # This completely stops Plotly's underlying engine from throwing a KeyError
+            active_colors = {c: master_colors[c] for c in color_summary['color'] if c in master_colors}
+
             fig_group_indiv = px.bar(
                 color_summary, 
                 x='color', 
                 y='Games_Played',
-                color='color',  # Tell Plotly each bar gets its own color category
+                color='color',  
                 title="How Often Each Color is Played (All Decks)",
-                color_discrete_map=master_colors  # Force individual color coding matching master palette
+                color_discrete_map=active_colors  
             )
             fig_group_indiv.update_layout(template="plotly_dark", showlegend=False, xaxis_title="Color")
             st.plotly_chart(fig_group_indiv, use_container_width=True)
@@ -149,24 +157,27 @@ def run():
             Wins=('is_winner', 'sum')
         ).reset_index()
         
-        # Enforce WUBRG sorting here too
-        player_color_sum['color'] = pd.Categorical(player_color_sum['color'], categories=WUBRG_ORDER, ordered=True)
-        player_color_sum = player_color_sum.sort_values('color').reset_index(drop=True)
+        # --- SAFE WUBRG SORTING FOR INDIVIDUAL PLAYER ---
+        player_color_sum['sort_idx'] = player_color_sum['color'].map(sort_map)
+        player_color_sum = player_color_sum.sort_values('sort_idx').drop(columns=['sort_idx']).reset_index(drop=True)
+        player_color_sum['color'] = player_color_sum['color'].astype(str)
         
         player_color_sum['Win Rate (%)'] = round((player_color_sum['Wins'] / player_color_sum['Games_Played']) * 100, 1)
 
         p_col1, p_col2 = st.columns([1, 1])
         
         with p_col1:
-            # Bulletproof donut color lock using strict mapping properties
+            # Build a dynamic palette map for the active player's history
+            player_active_colors = {c: master_colors[c] for c in player_color_sum['color'] if c in master_colors}
+
             fig_player_pie = px.pie(
                 player_color_sum, 
                 values='Games_Played', 
                 names='color',
-                color='color',  # Ties the segment names directly to the color keys
+                color='color',  
                 title=f"{selected_player}'s Color Distribution",
                 hole=0.4,
-                color_discrete_map=master_colors  # Hard locks colors regardless of missing values
+                color_discrete_map=player_active_colors  
             )
             fig_player_pie.update_layout(template="plotly_dark")
             st.plotly_chart(fig_player_pie, use_container_width=True)
