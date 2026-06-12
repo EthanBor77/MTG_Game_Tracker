@@ -73,7 +73,6 @@ def run():
     combo_df = process_combinations(raw_df)
 
     # --- THE FOOLPROOF DATABASE CLEANSE ---
-    # If the database returns strings with emojis, strip them down to clean text strings
     for df in [indiv_df, combo_df]:
         if 'color' in df.columns:
             df['color'] = df['color'].astype(str).str.replace(" ☀️", "").str.replace(" 💧", "").str.replace(" 💀", "").str.replace(" 🔥", "").str.replace(" 🌳", "").str.replace(" 💎", "")
@@ -99,17 +98,19 @@ def run():
         sort_map = {color_name: i for i, color_name in enumerate(WUBRG_ORDER)}
         color_summary['sort_idx'] = color_summary['color'].map(sort_map).fillna(99)
         color_summary = color_summary.sort_values('sort_idx').reset_index(drop=True)
-        
         color_summary['Win Rate (%)'] = round((color_summary['Wins'] / color_summary['Games_Played']) * 100, 1)
+
+        # CRITICAL FIX: Rename the 'color' column to stop Plotly from auto-grouping by name
+        color_summary = color_summary.rename(columns={'color': 'MTG_Color'})
 
         c1, c2 = st.columns([2, 1])
         with c1:
             # Build colors explicitly tied to the exact rows present
-            bar_colors = [master_colors.get(c, "#888888") for c in color_summary['color']]
+            bar_colors = [master_colors.get(c, "#888888") for c in color_summary['MTG_Color']]
 
             fig_group_indiv = px.bar(
                 color_summary, 
-                x='color', 
+                x='MTG_Color',  # Clean column name
                 y='Games_Played',
                 title="How Often Each Color is Played (All Decks)"
             )
@@ -120,7 +121,7 @@ def run():
         with c2:
             st.write("### Color Win Rates")
             st.dataframe(
-                color_summary[['color', 'Games_Played', 'Win Rate (%)']],
+                color_summary[['MTG_Color', 'Games_Played', 'Win Rate (%)']].rename(columns={'MTG_Color': 'color'}),
                 hide_index=True, use_container_width=True
             )
 
@@ -161,18 +162,20 @@ def run():
         
         player_color_sum['sort_idx'] = player_color_sum['color'].map(sort_map).fillna(99)
         player_color_sum = player_color_sum.sort_values('sort_idx').reset_index(drop=True)
-        
         player_color_sum['Win Rate (%)'] = round((player_color_sum['Wins'] / player_color_sum['Games_Played']) * 100, 1)
+
+        # CRITICAL FIX: Rename the column here as well to protect the Donut chart
+        player_color_sum = player_color_sum.rename(columns={'color': 'MTG_Color'})
 
         p_col1, p_col2 = st.columns([1, 1])
         
         with p_col1:
-            pie_colors = [master_colors.get(c, "#888888") for c in player_color_sum['color']]
+            pie_colors = [master_colors.get(c, "#888888") for c in player_color_sum['MTG_Color']]
 
             fig_player_pie = px.pie(
                 player_color_sum, 
                 values='Games_Played', 
-                names='color',
+                names='MTG_Color',
                 title=f"{selected_player}'s Color Distribution",
                 hole=0.4,
                 color_discrete_sequence=pie_colors
@@ -183,7 +186,7 @@ def run():
         with p_col2:
             st.write(f"### {selected_player}'s Performance by Color")
             st.dataframe(
-                player_color_sum[['color', 'Games_Played', 'Win Rate (%)']],
+                player_color_sum[['MTG_Color', 'Games_Played', 'Win Rate (%)']].rename(columns={'MTG_Color': 'color'}),
                 hide_index=True, use_container_width=True
             )
 
