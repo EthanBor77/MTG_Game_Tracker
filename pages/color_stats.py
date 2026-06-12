@@ -2,15 +2,16 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go  # Added for absolute chart stability
 
 # Global clean MTG hex codes mapping (No emojis)
 master_colors = {
-    "White": "#F7F2D8", 
-    "Blue": "#1D79C3", 
-    "Black": "#2F2F31",
-    "Red": "#D33E36", 
-    "Green": "#3E8D5D", 
-    "Colorless": "#9FA4A9"
+    "White": "#F8E7B9", 
+    "Blue": "#B3CEE5", 
+    "Black": "#A69995",
+    "Red": "#E4B3A6", 
+    "Green": "#A4C7A6", 
+    "Colorless": "#D3D3D3"
 }
 
 # Define the canonical Magic color hierarchy
@@ -100,28 +101,35 @@ def run():
         color_summary = color_summary.sort_values('sort_idx').reset_index(drop=True)
         color_summary['Win Rate (%)'] = round((color_summary['Wins'] / color_summary['Games_Played']) * 100, 1)
 
-        # CRITICAL FIX: Rename the 'color' column to stop Plotly from auto-grouping by name
-        color_summary = color_summary.rename(columns={'color': 'MTG_Color'})
-
         c1, c2 = st.columns([2, 1])
         with c1:
-            # Build colors explicitly tied to the exact rows present
-            bar_colors = [master_colors.get(c, "#888888") for c in color_summary['MTG_Color']]
+            # Extract plain Python lists to feed into go.Bar (completely circumvents pandas KeyErrors)
+            list_x_colors = color_summary['color'].tolist()
+            list_y_games = color_summary['Games_Played'].tolist()
+            bar_colors = [master_colors.get(c, "#888888") for c in list_x_colors]
 
-            fig_group_indiv = px.bar(
-                color_summary, 
-                x='MTG_Color',  # Clean column name
-                y='Games_Played',
-                title="How Often Each Color is Played (All Decks)"
+            # Use go.Figure and go.Bar for absolute baseline rendering stability
+            fig_group_indiv = go.Figure(data=[
+                go.Bar(
+                    x=list_x_colors,
+                    y=list_y_games,
+                    marker_color=bar_colors,
+                    hovertemplate="Color: %{x}<br>Games Played: %{y}<extra></extra>"
+                )
+            ])
+            
+            fig_group_indiv.update_layout(
+                title="How Often Each Color is Played (All Decks)",
+                template="plotly_dark",
+                xaxis_title="Color",
+                yaxis_title="Games Played"
             )
-            fig_group_indiv.update_traces(marker_color=bar_colors)
-            fig_group_indiv.update_layout(template="plotly_dark", xaxis_title="Color")
             st.plotly_chart(fig_group_indiv, use_container_width=True)
             
         with c2:
             st.write("### Color Win Rates")
             st.dataframe(
-                color_summary[['MTG_Color', 'Games_Played', 'Win Rate (%)']].rename(columns={'MTG_Color': 'color'}),
+                color_summary[['color', 'Games_Played', 'Win Rate (%)']],
                 hide_index=True, use_container_width=True
             )
 
@@ -164,18 +172,15 @@ def run():
         player_color_sum = player_color_sum.sort_values('sort_idx').reset_index(drop=True)
         player_color_sum['Win Rate (%)'] = round((player_color_sum['Wins'] / player_color_sum['Games_Played']) * 100, 1)
 
-        # CRITICAL FIX: Rename the column here as well to protect the Donut chart
-        player_color_sum = player_color_sum.rename(columns={'color': 'MTG_Color'})
-
         p_col1, p_col2 = st.columns([1, 1])
         
         with p_col1:
-            pie_colors = [master_colors.get(c, "#888888") for c in player_color_sum['MTG_Color']]
+            pie_colors = [master_colors.get(c, "#888888") for c in player_color_sum['color']]
 
             fig_player_pie = px.pie(
                 player_color_sum, 
                 values='Games_Played', 
-                names='MTG_Color',
+                names='color',
                 title=f"{selected_player}'s Color Distribution",
                 hole=0.4,
                 color_discrete_sequence=pie_colors
@@ -186,7 +191,7 @@ def run():
         with p_col2:
             st.write(f"### {selected_player}'s Performance by Color")
             st.dataframe(
-                player_color_sum[['MTG_Color', 'Games_Played', 'Win Rate (%)']].rename(columns={'MTG_Color': 'color'}),
+                player_color_sum[['color', 'Games_Played', 'Win Rate (%)']],
                 hide_index=True, use_container_width=True
             )
 
