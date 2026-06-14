@@ -7,6 +7,7 @@ Features:
 1. Add Players and Decks (with search-to-select).
 2. Log Games with dynamic player counts (3-6+ players).
 3. View Game History with dual-ID display (Display # vs Database ID).
+4. Remove misinput games or decks safely.
 """
 
 DB_NAME = "mtg_stats.db"
@@ -56,11 +57,15 @@ def add_deck():
     if p_id:
         deck_name = input("Enter Deck Name: ").strip()
         
-        # Capture raw color string (e.g., "rg" or "gru")
-        raw_colors = input("Enter Deck Colors (WUBRG combo, e.g., 'GUB'): ").strip()
-        # Clean and enforce WUBRG order
-        clean_colors = format_wubrg(raw_colors)
-        
+        # Validation Loop for Color Input
+        while True:
+            raw_colors = input("Enter Deck Colors (WUBRG combo or C, e.g., 'GUB'): ").strip()
+            clean_colors = format_wubrg(raw_colors)
+            
+            if clean_colors is not None:
+                break
+            print("Please try entering the color combination again.")
+
         with get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -70,10 +75,29 @@ def add_deck():
             print(f"Deck '{deck_name}' [{clean_colors}] registered successfully.")
 
 def format_wubrg(color_string):
-    """Sorts a string of colors into strict WUBRG order."""
+    """Sorts a string of colors into strict WUBRG order and validates valid values."""
+    cleaned_input = color_string.upper().replace(" ", "")
+    
+    if not cleaned_input:
+        print("!!! ERROR: Color identity string cannot be blank.")
+        return None
+
+    # Handle explicit mono-colorless entries
+    if cleaned_input == 'C':
+        return 'C'
+
+    # Strict list of valid MTG components
+    valid_elements = set("WUBRG")
     wubrg_order = {char: index for index, char in enumerate("WUBRG")}
+    
+    # Check for invalid text variables (like 'Y')
+    for char in cleaned_input:
+        if char not in valid_elements:
+            print(f"!!! ERROR: '{char}' is an invalid color identity item. Use ONLY combinations of W, U, B, R, G or a single C.")
+            return None
+
     # Sort based on the character's position in WUBRG string
-    sorted_colors = sorted(color_string.upper(), key=lambda char: wubrg_order.get(char, 99))
+    sorted_colors = sorted(cleaned_input, key=lambda char: wubrg_order[char])
     return "".join(sorted_colors)
 
 def rename_deck():
@@ -100,6 +124,47 @@ def rename_deck():
                 print(f"Success! '{old_name}' renamed to '{new_name}'.")
             except sqlite3.Error as e:
                 print(f"An error occurred: {e}")
+
+def remove_deck():
+    """Finds an existing deck and deletes it from the database after confirmation."""
+    print("\n--- Remove a Deck Entry ---")
+    deck_search = input("Search for the deck you want to REMOVE: ")
+    d_id = find_item("decks", "deck_name", deck_search)
+    
+    if d_id:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            
+            # Fetch details to show the user what they are deleting
+            cursor.execute("""
+                SELECT d.deck_name, d.deck_colors, p.player_name 
+                FROM decks d
+                JOIN players p ON d.player_id = p.player_id
+                WHERE d.deck_id = ?
+            """, (d_id,))
+            deck_info = cursor.fetchone()
+            
+            if not deck_info:
+                print("Error: Could not retrieve deck metadata.")
+                return
+                
+            name, colors, owner = deck_info
+            print(f"\nTarget Deck Found: '{name}' [{colors}] owned by {owner}")
+            print("⚠️ WARNING: Deleting this deck will break match references if it has logged history!")
+            
+            confirm = input(f"Are you absolutely sure you want to delete this deck? (y/n): ").lower()
+            if confirm == 'y':
+                try:
+                    # Clean out the deck dependency links from participants table first
+                    cursor.execute("DELETE FROM participants WHERE deck_id = ?", (d_id,))
+                    # Clean out target deck
+                    cursor.execute("DELETE FROM decks WHERE deck_id = ?", (d_id,))
+                    conn.commit()
+                    print(f"Success: Deck '{name}' has been permanently deleted.")
+                except sqlite3.Error as e:
+                    print(f"Database error occurred: {e}")
+            else:
+                print("Deletion cancelled.")
 
 def log_game():
     """Main function to log a match, its participants, and its result."""
@@ -142,7 +207,6 @@ def log_game():
             if input("0 winners. Was this a draw? (y/n): ").lower() != 'y': return
 
         # 4. Database Insertion
-        # Calculate the next display number (not the primary key)
         cursor.execute("SELECT MAX(game_number) FROM games")
         max_row = cursor.fetchone()[0]
         next_num = (max_row + 1) if max_row is not None else 1
@@ -152,7 +216,7 @@ def log_game():
             VALUES (?, ?, ?, ?, ?)
         """, (next_num, date, fb_turn, end_turn, win_con))
         
-        game_id = cursor.lastrowid # Hidden Primary Key for foreign key links
+        game_id = cursor.lastrowid
 
         for p_id, d_id, win, turn in participants_data:
             cursor.execute("""
@@ -190,7 +254,6 @@ def view_recent_games():
     with get_connection() as conn:
         cursor = conn.cursor()
         
-        # We fetch the last 20 rows (approx 4-5 games depending on pod size)
         query = """
             SELECT g.game_number, g.game_id, g.game_date, g.first_blood_turn, g.end_turn, g.win_condition,
                    p.player_name, d.deck_name, part.is_winner
@@ -223,7 +286,6 @@ def view_recent_games():
                     print("-" * 95) 
                 
                 print(f"\n[ GAME #{g_num} ]  Date: {date}  |  FB Turn: {fb_turn}  |  End Turn: {end_turn}  |  Win Con: {win_con}")
-                # print(f"{'-'*15}")
                 print(f"{'ID':<4} | {'Player':<15} | {'Result':<10} | {'Deck'}\n")
                 current_num = g_num
             
@@ -236,7 +298,6 @@ def export_full_log():
     """Prints every game with a header for game-wide stats followed by participant details."""
     with get_connection() as conn:
         cursor = conn.cursor()
-        # Fetching all relevant columns including turn data and win condition
         cursor.execute("""
             SELECT g.game_number, g.game_id, g.game_date, g.first_blood_turn, g.end_turn, g.win_condition,
                    p.player_name, d.deck_name, part.is_winner
@@ -260,17 +321,14 @@ def export_full_log():
         for r in rows:
             g_num, g_id, date, fb_turn, end_turn, win_con, p_name, d_name, is_win = r
             
-            # If we hit a new game, print the Game Header
             if g_num != current_num:
                 if current_num is not None:
-                    print("-" * 95) # Divider between games
+                    print("-" * 95)
                 
                 print(f"\n[ GAME #{g_num} ]  Date: {date}  |  FB Turn: {fb_turn}  |  End Turn: {end_turn}  |  Win Con: {win_con}")
-                # print(f"{'-'*15}")
                 print(f"{'ID':<4} | {'Player':<15} | {'Result':<10} | {'Deck'}\n")
                 current_num = g_num
             
-            # Print the individual player rows for that game
             res = "WINNER" if is_win else "---"
             print(f"{g_id:<4} | {p_name:<15} | {res:<10} | {d_name}")
 
@@ -296,9 +354,9 @@ def remove_game():
         print(f"\nTarget: Game #{game[2]} (ID: {game_id}) | Date: {game[0]}")
         if input(f"Confirm delete Game #{game[2]}? (y/n): ").lower() == 'y':
             try:
-                # Remove dependencies first
                 cursor.execute("DELETE FROM participants WHERE game_id = ?", (game_id,))
                 cursor.execute("DELETE FROM games WHERE game_id = ?", (game_id,))
+                conn.commit()
                 print(f"Success: Game #{game[2]} removed.")
             except sqlite3.Error as e:
                 print(f"An error occurred: {e}")
@@ -309,7 +367,7 @@ def main():
     """Main menu loop for the script."""
     while True:
         print("\n=== MTG STAT TRACKER ===")
-        print("1. Add Player\n2. Add Deck\n3. Rename Deck\n4. Log New Game\n5. View Recent\n6. Check ALL\n7. Remove Game\n8. Exit")
+        print("1. Add Player\n2. Add Deck\n3. Rename Deck\n4. Log New Game\n5. View Recent\n6. Check ALL\n7. Remove Game\n8. REMOVE DECK\n9. Exit")
         choice = input("\nSelect: ")
         if choice == '1': add_player()
         elif choice == '2': add_deck()
@@ -318,7 +376,8 @@ def main():
         elif choice == '5': view_recent_games()
         elif choice == '6': export_full_log()
         elif choice == '7': remove_game()
-        elif choice == '8': break
+        elif choice == '8': remove_deck()  # Maps directly to the new deletion tool
+        elif choice == '9': break
 
 if __name__ == "__main__":
     main()
