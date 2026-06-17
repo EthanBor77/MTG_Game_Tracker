@@ -5,10 +5,39 @@ import sqlite3
 st.set_page_config(page_title="MTG Stats - Decks", layout="wide")
 st.title("🎴 Individual Deck Performance")
 
+def get_player_overview_metrics(player_name):
+    """Fetches high-level summary metrics for a given player."""
+    conn = sqlite3.connect("mtg_stats.db")
+    cursor = conn.cursor()
+    
+    # 1. Total Games Logged & Unique Decks Played
+    cursor.execute("""
+        SELECT COUNT(part.participant_id), COUNT(DISTINCT part.deck_id)
+        FROM participants part
+        JOIN players p ON part.player_id = p.player_id
+        WHERE p.player_name = ?
+    """, (player_name,))
+    games_logged, decks_played = cursor.fetchone()
+    
+    # 2. Total Different Decks Owned (Registered in the decks table)
+    cursor.execute("""
+        SELECT COUNT(d.deck_id)
+        FROM decks d
+        JOIN players p ON d.player_id = p.player_id
+        WHERE p.player_name = ?
+    """, (player_name,))
+    decks_owned = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    return {
+        "games_logged": games_logged if games_logged else 0,
+        "decks_owned": decks_owned if decks_owned else 0,
+        "decks_played": decks_played if decks_played else 0
+    }
+
 def get_deck_data(player_name):
     conn = sqlite3.connect("mtg_stats.db")
-    # We join participants to players to ensure we are looking at 
-    # the person who actually sat in the seat for that game.
     query = """
         SELECT 
             d.deck_name, 
@@ -25,9 +54,7 @@ def get_deck_data(player_name):
     conn.close()
     
     if not df.empty:
-        # Standardizing the win rate calculation
         df['win_rate'] = (df['wins'] / df['games'] * 100).round(1)
-        # Rename columns for a cleaner Streamlit UI
         df.columns = ['Deck Name', 'Games Played', 'Total Wins', 'Win Rate %']
     return df
 
@@ -39,18 +66,28 @@ conn.close()
 selected_player = st.selectbox("Select a Player to see their decks:", player_list)
 
 if selected_player:
+    # Fetch and render the new high-level stat row
+    metrics = get_player_overview_metrics(selected_player)
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric(label="Total Games Logged", value=metrics["games_logged"])
+    with col2:
+        st.metric(label="Decks Owned", value=metrics["decks_owned"])
+    with col3:
+        st.metric(label="Decks Played", value=metrics["decks_played"])
+        
+    st.divider() # Clean separation line between metrics and the data table
+
+    # Render Deck Breakdown Table
     deck_stats = get_deck_data(selected_player)
     if not deck_stats.empty:
-        # 1. Change sort target to 'Games Played'
-        # Set ascending=False to show the most played decks at the top
         sorted_stats = deck_stats.sort_values('Games Played', ascending=False)
         
-        # 2. Apply the style for the Win Rate % column
         styled_stats = sorted_stats.style.format({
             'Win Rate %': '{:.2f}%'
         })
         
-        # 3. Display the dataframe with the new width parameter
         st.dataframe(
             styled_stats, 
             width="stretch", 

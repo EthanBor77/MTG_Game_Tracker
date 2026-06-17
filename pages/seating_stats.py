@@ -92,41 +92,5 @@ try:
 
     st.divider()
 
-    # # --- SURVIVAL WINDOW SECTION ---
-    # st.subheader("⏱️ The Survival Window")
-    # if not survival.empty:
-    #     # Swap the column order: Final Turn first, then First Blood Turn
-    #     chart_data = survival[['end_turn', 'first_blood_turn']].copy()
-    #     chart_data.columns = ['Final Turn', 'First Blood Turn']
-    #     chart_data = chart_data.sort_values('First Blood Turn').reset_index(drop=True)
-        
-    #     # Color mapping: Blue for the background (Final Turn), Red for the foreground (First Blood)
-    #     st.area_chart(
-    #         chart_data, 
-    #         color=["#29b5e8", "#FF0000"] 
-    #     )
-        
-    #     st.info(f"💡 **Meta Insight:** On average, once the first player is eliminated on **Turn {avg_f:.1f}**, "
-    #             f"the game lasts another **{avg_gap:.1f} turns**. ")
-    # else:
-    #     st.warning("No timing data found. Ensure 'first_blood_turn' and 'end_turn' are populated.")
-
-
-    # --- META INSIGHTS (The No-Graph Replacement) ---
-    # st.subheader("⏱️ Game Pace Analysis")
-    
-    # col_a, col_b = st.columns(2)
-    
-    # with col_a:
-    #     st.markdown(f"**Lethality Level:** Most games see their first elimination by **Turn {avg_f:.1f}**.")
-    #     st.markdown(f"**Closing Speed:** Once the first player is out, the game typically wraps up in **{avg_gap:.1f} turns**.")
-        
-    # with col_b:
-    #     # Fun logic-based insight
-    #     if avg_gap > 4:
-    #         st.warning("⚠️ **High Survival Gap:** We might be 'durdling' after the first kill. Consider more win-cons or more decisive plays!")
-    #     else:
-    #         st.success("✅ **Efficient Finishing:** We're doing great at closing games once the first person falls. (I'm Proud of You!)")
-
 except Exception as e:
     st.error(f"Error generating seating stats: {e}")
