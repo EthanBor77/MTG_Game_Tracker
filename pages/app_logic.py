@@ -62,7 +62,6 @@ def render_last_updated_tag():
         
         if last_date:
             # Converts YYYY-MM-DD to a cleaner format
-            last_date = datetime.strptime(last_date, "%Y-%m-%d").strftime("%B %d, %Y")
             st.caption(f"⚙️ Last match logged: {last_date}")
         else:
             st.caption("⚙️ Last match logged: No games recorded yet")
