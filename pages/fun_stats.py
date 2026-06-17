@@ -57,7 +57,7 @@ def run():
         col3.caption(f"Game #{gap['game_number']} (End - First Blood)")
 
     # Days Until Colt's Birthday
-    colt_birthday = datetime(2009, 1, 28)
+    colt_birthday = datetime(2027, 1, 28)
     today = datetime.now()
     days_left = (colt_birthday - today).days
     col4.metric("Days Until Colt's Birthday", f"{days_left} days")
