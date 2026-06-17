@@ -61,12 +61,13 @@ def render_last_updated_tag():
             last_date = cursor.fetchone()[0]
         
         if last_date:
-            st.badge(f"Last match logged: {last_date}", color="gray")
+            date_obj = datetime.strptime(last_date, "%Y-%m-%d")
+            formatted_date = date_obj.strftime("%m/%d/%Y")
+            
+            st.badge(f"Last match logged: {formatted_date}", color="gray")
         else:
-            st.badge("Last match logged: No games recorded yet", color="gray")
+            st.badge("Last match logged: No games recorded yet", color="red")
     except Exception:
-        # Fail-safe so a database lock doesn't crash the homepage
-        st.badge("Last match logged: Unknown", color="gray")
+        st.badge("Last match logged: Unknown", color="red")
 
-# Call this at the very end of your home page layout script
 render_last_updated_tag()
