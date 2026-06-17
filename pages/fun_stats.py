@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import plotly.express as px
+from datetime import datetime
 
 st.set_page_config(page_title="MTG Stats - Fun Stats", layout="wide")
 st.title("🎉 Fun Stats")
@@ -37,23 +38,30 @@ def run():
 
     # --- TOP ROW: Record Breakers ---
     st.header("🏆 The Hall of Records")
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
 
     # Shortest Game
     shortest = extremes_df.sort_values("end_turn").iloc[0]
-    col1.metric("⚡ Shortest Game", f"Turn {shortest['end_turn']}")
+    col1.metric("Shortest Game", f"Turn {shortest['end_turn']}")
     col1.caption(f"Game #{shortest['game_number']} | {shortest['win_condition']}")
 
     # Longest Game
     longest = extremes_df.sort_values("end_turn", ascending=False).iloc[0]
-    col2.metric("⏳ Longest Game", f"Turn {longest['end_turn']}")
+    col2.metric("Longest Game", f"Turn {longest['end_turn']}")
     col2.caption(f"Game #{longest['game_number']} | {longest['win_condition']}")
 
     # Survival Gap
     if not gap_df.empty:
         gap = gap_df.iloc[0]
-        col3.metric("🛡️ Longest Survival Gap", f"{gap['survival_gap']} Turns")
+        col3.metric("Longest Survival Gap", f"{gap['survival_gap']} Turns")
         col3.caption(f"Game #{gap['game_number']} (End - First Blood)")
+
+    # Days Until Colt's Birthday
+    colt_birthday = datetime(2009, 1, 28)
+    today = datetime.now()
+    days_left = (colt_birthday - today).days
+    col4.metric("Days Until Colt's Birthday", f"{days_left} days")
+    col4.caption("Get ready for the celebration!")
 
     st.divider()
 
@@ -75,7 +83,7 @@ def run():
         st.info("Log more games to see win condition distributions!")
 
     # --- BOTTOM SECTION: The Fast & The Slow ---
-    with st.expander("View Full Turn Count Breakdown"):
+    with st.container("View Full Turn Count Breakdown"):
         # Quick query for a histogram
         with get_connection() as conn:
             all_turns = pd.read_sql("SELECT end_turn FROM games", conn)
