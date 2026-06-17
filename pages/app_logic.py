@@ -1,3 +1,5 @@
+import datetime
+
 import streamlit as st
 import pandas as pd
 import sqlite3
@@ -49,3 +51,24 @@ try:
     
 except Exception as e:
     st.error(f"Error loading leaderboard: {e}")
+
+def render_last_updated_tag():
+    query = "SELECT MAX(game_date) FROM games"
+    try:
+        with sqlite3.connect("mtg_stats.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute(query)
+            last_date = cursor.fetchone()[0]
+        
+        if last_date:
+            # Converts YYYY-MM-DD to a cleaner format
+            last_date = datetime.strptime(last_date, "%Y-%m-%d").strftime("%B %d, %Y")
+            st.caption(f"⚙️ Last match logged: {last_date}")
+        else:
+            st.caption("⚙️ Last match logged: No games recorded yet")
+    except Exception:
+        # Fail-safe so a database lock doesn't crash the homepage
+        st.caption("⚙️ Last match logged: Unknown")
+
+# Call this at the very end of your home page layout script
+render_last_updated_tag()
