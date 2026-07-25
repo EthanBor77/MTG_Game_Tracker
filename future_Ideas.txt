@@ -5,3 +5,8 @@ Future Ideas / Additions for this project
 - infinite combo tracker
 - do winrates go up or down as a deck is played
 - for each deck give a number on individual deck performance table and colors
+- display average plays per deck on player trends page
+- some way to select which deck to play
+    - select from their decks
+    - select from decks they select
+    - select from archetypes
